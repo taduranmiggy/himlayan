@@ -1,0 +1,72 @@
+.theme-toggle {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  border-radius: var(--radius-full, 9999px);
+  transition: all 0.2s ease;
+}
+
+.theme-toggle:hover {
+  background: var(--bg-tertiary, #f3f4f6);
+}
+
+.theme-toggle:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(26, 71, 42, 0.2);
+}
+
+.theme-toggle-track {
+  position: relative;
+  width: 56px;
+  height: 28px;
+  background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 6px;
+  transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .theme-toggle-track {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+}
+
+.theme-toggle-icon {
+  font-size: 12px;
+  z-index: 1;
+  transition: opacity 0.2s ease;
+}
+
+.theme-toggle-icon.sun {
+  opacity: 1;
+}
+
+.theme-toggle-icon.moon {
+  opacity: 0.5;
+}
+
+[data-theme="dark"] .theme-toggle-icon.sun {
+  opacity: 0.5;
+}
+
+[data-theme="dark"] .theme-toggle-icon.moon {
+  opacity: 1;
+}
+
+.theme-toggle-thumb {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  left: 3px;
+}
+
+.theme-toggle-thumb.dark {
+  transform: translateX(28px);
+  background: #0f172a;
+}
