@@ -12,34 +12,34 @@ const CommandPalette = ({ isOpen, onClose }) => {
 
   const commands = [
     // Navigation
-    { id: 'nav-dashboard', label: 'Go to Dashboard', icon: '📊', category: 'navigation', action: () => navigate('/admin/dashboard') },
-    { id: 'nav-burials', label: 'Go to Burial Records', icon: '📋', category: 'navigation', action: () => navigate('/burial-records') },
-    { id: 'nav-plots', label: 'Go to Plots', icon: '🗺️', category: 'navigation', action: () => navigate('/plots') },
-    { id: 'nav-map', label: 'Go to Cemetery Map', icon: '📍', category: 'navigation', action: () => navigate('/map') },
+    { id: 'nav-dashboard', label: 'Go to Dashboard', icon: '', category: 'navigation', action: () => navigate('/admin/dashboard') },
+    { id: 'nav-burials', label: 'Go to Burial Records', icon: '', category: 'navigation', action: () => navigate('/burial-records') },
+    { id: 'nav-plots', label: 'Go to Plots', icon: '', category: 'navigation', action: () => navigate('/plots') },
+    { id: 'nav-map', label: 'Go to Cemetery Map', icon: '', category: 'navigation', action: () => navigate('/map') },
     
     // Actions
-    { id: 'action-add-burial', label: 'Add New Burial Record', icon: '➕', category: 'actions', action: () => { navigate('/burial-records'); /* TODO: open modal */ } },
-    { id: 'action-add-plot', label: 'Add New Plot', icon: '➕', category: 'actions', action: () => { navigate('/plots'); /* TODO: open modal */ } },
-    { id: 'action-search', label: 'Search Records', icon: '🔍', category: 'actions', action: () => { /* TODO */ } },
-    { id: 'action-export', label: 'Export Data', icon: '📤', category: 'actions', action: () => { /* TODO */ } },
+    { id: 'action-add-burial', label: 'Add New Burial Record', icon: '', category: 'actions', action: () => { navigate('/burial-records'); /* TODO: open modal */ } },
+    { id: 'action-add-plot', label: 'Add New Plot', icon: '', category: 'actions', action: () => { navigate('/plots'); /* TODO: open modal */ } },
+    { id: 'action-search', label: 'Search Records', icon: '', category: 'actions', action: () => { /* TODO */ } },
+    { id: 'action-export', label: 'Export Data', icon: '', category: 'actions', action: () => { /* TODO */ } },
     
     // Settings
-    { id: 'settings-profile', label: 'My Profile', icon: '👤', category: 'settings', action: () => { /* TODO */ } },
-    { id: 'settings-theme', label: 'Toggle Dark Mode', icon: '🌙', category: 'settings', action: () => document.documentElement.setAttribute('data-theme', document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark') },
-    { id: 'settings-logout', label: 'Logout', icon: '🚪', category: 'settings', action: () => { /* TODO */ } },
+    { id: 'settings-profile', label: 'My Profile', icon: '', category: 'settings', action: () => { /* TODO */ } },
+    { id: 'settings-theme', label: 'Toggle Dark Mode', icon: '', category: 'settings', action: () => document.documentElement.setAttribute('data-theme', document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark') },
+    { id: 'settings-logout', label: 'Logout', icon: '', category: 'settings', action: () => { /* TODO */ } },
     
     // Help
-    { id: 'help-shortcuts', label: 'Keyboard Shortcuts', icon: '⌨️', category: 'help', action: () => { /* TODO */ } },
-    { id: 'help-docs', label: 'Documentation', icon: '📖', category: 'help', action: () => { /* TODO */ } },
-    { id: 'help-support', label: 'Contact Support', icon: '💬', category: 'help', action: () => { /* TODO */ } },
+    { id: 'help-shortcuts', label: 'Keyboard Shortcuts', icon: '', category: 'help', action: () => { /* TODO */ } },
+    { id: 'help-docs', label: 'Documentation', icon: '', category: 'help', action: () => { /* TODO */ } },
+    { id: 'help-support', label: 'Contact Support', icon: '', category: 'help', action: () => { /* TODO */ } },
   ];
 
   const categories = [
-    { id: 'all', label: 'All', icon: '⚡' },
-    { id: 'navigation', label: 'Navigation', icon: '🧭' },
-    { id: 'actions', label: 'Actions', icon: '⚙️' },
-    { id: 'settings', label: 'Settings', icon: '⚙️' },
-    { id: 'help', label: 'Help', icon: '❓' },
+    { id: 'all', label: 'All', icon: '' },
+    { id: 'navigation', label: 'Navigation', icon: '' },
+    { id: 'actions', label: 'Actions', icon: '' },
+    { id: 'settings', label: 'Settings', icon: '' },
+    { id: 'help', label: 'Help', icon: '' },
   ];
 
   const filteredCommands = commands.filter(cmd => {
@@ -86,7 +86,6 @@ const CommandPalette = ({ isOpen, onClose }) => {
       <div className="command-palette" onClick={e => e.stopPropagation()}>
         {/* Search Input */}
         <div className="command-palette-header">
-          <span className="command-palette-icon">🔍</span>
           <input
             ref={inputRef}
             type="text"
@@ -131,7 +130,6 @@ const CommandPalette = ({ isOpen, onClose }) => {
             </ul>
           ) : (
             <div className="command-empty">
-              <span>😕</span>
               <p>No commands found</p>
             </div>
           )}

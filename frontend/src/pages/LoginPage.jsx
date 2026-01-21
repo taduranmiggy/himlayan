@@ -120,7 +120,7 @@ const LoginPage = () => {
                     className="cyl-password-toggle"
                     onClick={() => setShowPassword(!showPassword)}
                   >
-                    {showPassword ? '👁️' : '👁️‍🗨️'}
+                    {showPassword ? 'Hide' : 'Show'}
                   </button>
                 </div>
               </div>

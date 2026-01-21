@@ -17,16 +17,16 @@ const ActivityFeed = ({ activities = [], loading = false, maxItems = 10 }) => {
 
   const getActivityIcon = (type) => {
     const icons = {
-      burial: '⚰️',
-      plot_reserved: '📋',
-      plot_available: '✅',
-      user_registered: '👤',
-      qr_generated: '📱',
-      maintenance: '🔧',
-      payment: '💰',
-      visit: '👁️',
+      burial: '●',
+      plot_reserved: '●',
+      plot_available: '●',
+      user_registered: '●',
+      qr_generated: '●',
+      maintenance: '●',
+      payment: '●',
+      visit: '●',
     };
-    return icons[type] || '📌';
+    return icons[type] || '●';
   };
 
   const getActivityColor = (type) => {
@@ -62,7 +62,7 @@ const ActivityFeed = ({ activities = [], loading = false, maxItems = 10 }) => {
     return (
       <div className="activity-feed">
         <div className="activity-feed-header">
-          <h3>📊 Recent Activity</h3>
+          <h3>Recent Activity</h3>
         </div>
         <div className="activity-feed-list">
           {[1, 2, 3, 4, 5].map(i => (
@@ -93,7 +93,7 @@ const ActivityFeed = ({ activities = [], loading = false, maxItems = 10 }) => {
   return (
     <div className="activity-feed">
       <div className="activity-feed-header">
-        <h3>📊 Recent Activity</h3>
+        <h3>Recent Activity</h3>
         <span className="activity-badge">{demoActivities.length} updates</span>
       </div>
       

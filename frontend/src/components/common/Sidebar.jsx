@@ -15,22 +15,52 @@ const Sidebar = () => {
       <ul className="sidebar-menu">
         <li>
           <NavLink to="/admin/dashboard" className={({ isActive }) => isActive ? 'active' : ''}>
-            <span className="sidebar-menu-icon">📊</span> Dashboard
+            Dashboard
           </NavLink>
         </li>
         <li>
           <NavLink to="/burial-records" className={({ isActive }) => isActive ? 'active' : ''}>
-            <span className="sidebar-menu-icon">📋</span> Burial Records
+            Burial Records
           </NavLink>
         </li>
         <li>
           <NavLink to="/plots" className={({ isActive }) => isActive ? 'active' : ''}>
-            <span className="sidebar-menu-icon">🗺️</span> Plots
+            Plots
           </NavLink>
         </li>
         <li>
           <NavLink to="/map" className={({ isActive }) => isActive ? 'active' : ''}>
-            <span className="sidebar-menu-icon">📍</span> Cemetery Map
+            Cemetery Map
+          </NavLink>
+        </li>
+        
+        {/* Management Section */}
+        <li className="sidebar-divider">Management</li>
+        {user?.role === 'admin' && (
+          <li>
+            <NavLink to="/admin/users" className={({ isActive }) => isActive ? 'active' : ''}>
+              Users
+            </NavLink>
+          </li>
+        )}
+        <li>
+          <NavLink to="/admin/announcements" className={({ isActive }) => isActive ? 'active' : ''}>
+            Announcements
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/admin/service-requests" className={({ isActive }) => isActive ? 'active' : ''}>
+            Service Requests
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/admin/payments" className={({ isActive }) => isActive ? 'active' : ''}>
+            Payments
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/admin/feedback" className={({ isActive }) => isActive ? 'active' : ''}>
+            Feedback
           </NavLink>
         </li>
       </ul>

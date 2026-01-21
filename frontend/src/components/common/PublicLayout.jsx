@@ -9,14 +9,14 @@ const PublicLayout = ({ children }) => {
   const location = useLocation();
 
   const navLinks = [
-    { path: '/', label: 'Home', icon: '🏠' },
-    { path: '/member/search', label: 'Find Grave', icon: '🔍' },
-    { path: '/qr-scan', label: 'QR Scan', icon: '📱' },
-    { path: '/pay-dues', label: 'Pay Dues', icon: '💳', auth: true },
-    { path: '/profile', label: 'Profile', icon: '👤', auth: true },
-    { path: '/feedback', label: 'Feedback', icon: '💬' },
-    { path: '/announcements', label: 'Announcements', icon: '📢' },
-    { path: '#about', label: 'About Us', icon: 'ℹ️' },
+    { path: '/', label: 'Home', icon: '' },
+    { path: '/member/search', label: 'Find Grave', icon: '' },
+    { path: '/qr-scan', label: 'QR Scan', icon: '' },
+    { path: '/pay-dues', label: 'Pay Dues', icon: '', auth: true },
+    { path: '/profile', label: 'Profile', icon: '', auth: true },
+    { path: '/feedback', label: 'Feedback', icon: '' },
+    { path: '/announcements', label: 'Announcements', icon: '' },
+    { path: '#about', label: 'About Us', icon: '' },
   ];
 
   const isActive = (path) => {
@@ -30,7 +30,6 @@ const PublicLayout = ({ children }) => {
       <nav className="public-nav">
         <div className="public-nav-container">
           <Link to="/" className="public-logo">
-            <span className="logo-icon">🏠</span>
             <div className="logo-text">
               <span className="logo-title">Himlayang Pilipino</span>
               <span className="logo-subtitle">A Tribute to Filipino Spirit</span>
@@ -42,7 +41,7 @@ const PublicLayout = ({ children }) => {
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle menu"
           >
-            {mobileMenuOpen ? '✕' : '☰'}
+            {mobileMenuOpen ? 'Close' : 'Menu'}
           </button>
 
           <ul className={`public-nav-menu ${mobileMenuOpen ? 'open' : ''}`}>
@@ -101,7 +100,6 @@ const PublicLayout = ({ children }) => {
       <footer className="public-footer">
         <div className="footer-container">
           <div className="footer-brand">
-            <span className="logo-icon">🏠</span>
             <div>
               <span className="footer-title">Himlayang Pilipino</span>
               <span className="footer-subtitle">Memorial Park</span>

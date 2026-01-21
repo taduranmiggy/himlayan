@@ -70,10 +70,10 @@ const AnnouncementsPage = () => {
 
   const getCategoryIcon = (category) => {
     switch (category) {
-      case 'schedule': return '📅';
-      case 'maintenance': return '🔧';
-      case 'update': return '📢';
-      default: return '📌';
+      case 'schedule': return '';
+      case 'maintenance': return '';
+      case 'update': return '';
+      default: return '';
     }
   };
 
@@ -132,7 +132,6 @@ const AnnouncementsPage = () => {
 
         {filteredAnnouncements.length === 0 && (
           <div className="no-announcements">
-            <span className="empty-icon">📭</span>
             <p>No announcements in this category</p>
           </div>
         )}

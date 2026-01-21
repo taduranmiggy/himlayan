@@ -160,7 +160,6 @@ const AdvancedSearch = ({
     <div className="advanced-search" ref={dropdownRef}>
       {/* Search Input */}
       <div className="search-input-wrapper">
-        <span className="search-icon">🔍</span>
         <input
           ref={inputRef}
           type="text"
@@ -173,7 +172,7 @@ const AdvancedSearch = ({
         />
         {query && (
           <button className="search-clear" onClick={() => setQuery('')}>
-            ✕
+            Clear
           </button>
         )}
         <kbd className="search-kbd">⌘K</kbd>
@@ -216,7 +215,7 @@ const AdvancedSearch = ({
             return (
               <span key={key} className="filter-tag">
                 {filter?.label}: {option?.label || value}
-                <button onClick={() => handleFilterChange(key, 'all')}>✕</button>
+                <button onClick={() => handleFilterChange(key, 'all')}>x</button>
               </span>
             );
           })}
@@ -239,13 +238,12 @@ const AdvancedSearch = ({
                     className="search-item recent"
                     onClick={() => setQuery(search)}
                   >
-                    <span className="item-icon">🕐</span>
                     <span className="item-text">{search}</span>
                     <button
                       className="item-remove"
                       onClick={(e) => clearRecentSearch(search, e)}
                     >
-                      ✕
+                      x
                     </button>
                   </li>
                 ))}
@@ -268,7 +266,6 @@ const AdvancedSearch = ({
                       onClick={() => handleResultSelect(result)}
                       onMouseEnter={() => setSelectedIndex(index)}
                     >
-                      <span className="item-icon">📋</span>
                       <div className="item-content">
                         <span className="item-text">
                           {searchFields[0].split('.').reduce((obj, key) => obj?.[key], result)}

@@ -52,7 +52,7 @@ const LandingPage = () => {
             className="mobile-menu-btn"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
-            ☰
+            Menu
           </button>
 
           <ul className={`landing-nav-menu ${mobileMenuOpen ? 'open' : ''}`}>
@@ -83,7 +83,7 @@ const LandingPage = () => {
         
         <div className="hero-content-wrapper">
           <div className="hero-badge-top">
-            <span>🏔️ Since 1971</span>
+            <span>Since 1971</span>
           </div>
           <h1 className="hero-title">
             <span className="hero-title-line">Himlayang</span>
@@ -168,14 +168,14 @@ const LandingPage = () => {
             </p>
             <div className="about-features">
               <div className="about-feature">
-                <div className="feature-icon">🏛️</div>
+                <div className="feature-icon"></div>
                 <div>
                   <h4>Cultural Heritage</h4>
                   <p>Preserving Filipino history through art and memorials</p>
                 </div>
               </div>
               <div className="about-feature">
-                <div className="feature-icon">💚</div>
+                <div className="feature-icon"></div>
                 <div>
                   <h4>Compassionate Care</h4>
                   <p>Supporting families with dignity and respect</p>
@@ -199,21 +199,21 @@ const LandingPage = () => {
           <div className="service-card-new service-featured" style={{backgroundImage: 'url(/Panooran-2.jpg)'}}>
             <div className="service-overlay"></div>
             <div className="service-content">
-              <span className="service-icon-new">🌿</span>
+              <span className="service-icon-new"></span>
               <h3>Lawn Lots</h3>
               <p>Beautifully maintained burial plots set in serene garden landscapes</p>
             </div>
           </div>
           <div className="service-card-new">
             <div className="service-content">
-              <span className="service-icon-new">🏛️</span>
+              <span className="service-icon-new"></span>
               <h3>Columbaries</h3>
               <p>Elegant niches for urns in peaceful, well-kept structures</p>
             </div>
           </div>
           <div className="service-card-new">
             <div className="service-content">
-              <span className="service-icon-new">🏰</span>
+              <span className="service-icon-new"></span>
               <h3>Mausoleums</h3>
               <p>Stately family crypts and private memorial structures</p>
             </div>
@@ -221,21 +221,21 @@ const LandingPage = () => {
           <div className="service-card-new service-featured" style={{backgroundImage: 'url(/heritage_HD.png)'}}>
             <div className="service-overlay"></div>
             <div className="service-content">
-              <span className="service-icon-new">⛰️</span>
+              <span className="service-icon-new"></span>
               <h3>Memorial Terraces</h3>
               <p>Customized memorial spaces with breathtaking scenic views</p>
             </div>
           </div>
           <div className="service-card-new">
             <div className="service-content">
-              <span className="service-icon-new">💜</span>
+              <span className="service-icon-new"></span>
               <h3>Bereavement Support</h3>
               <p>Compassionate support services for grieving families</p>
             </div>
           </div>
           <div className="service-card-new">
             <div className="service-content">
-              <span className="service-icon-new">📱</span>
+              <span className="service-icon-new"></span>
               <h3>Digital Memorial</h3>
               <p>QR-enabled grave profiles and online tributes</p>
             </div>
@@ -295,21 +295,21 @@ const LandingPage = () => {
             
             <div className="contact-cards">
               <div className="contact-card">
-                <div className="contact-card-icon">📍</div>
+                <div className="contact-card-icon"></div>
                 <div>
                   <h4>Location</h4>
                   <p>Himlayan Road, Barangay Pasong Tamo,<br/>Tandang Sora, Quezon City 1107</p>
                 </div>
               </div>
               <div className="contact-card">
-                <div className="contact-card-icon">📞</div>
+                <div className="contact-card-icon"></div>
                 <div>
                   <h4>Phone</h4>
                   <p>0917-130-6930<br/>0968-896-4850<br/>0917-713-5034</p>
                 </div>
               </div>
               <div className="contact-card">
-                <div className="contact-card-icon">🕐</div>
+                <div className="contact-card-icon"></div>
                 <div>
                   <h4>Hours</h4>
                   <p>Monday - Sunday<br/>6:00 AM - 6:00 PM</p>
@@ -345,8 +345,8 @@ const LandingPage = () => {
               </Link>
               <p>Himlayang Pilipino Memorial Park — A premier memorial park reflecting Filipino culture and values.</p>
               <div className="footer-social">
-                <a href="#" className="social-link" title="Facebook">📘</a>
-                <a href="#" className="social-link" title="YouTube">▶️</a>
+                <a href="#" className="social-link" title="Facebook">FB</a>
+                <a href="#" className="social-link" title="YouTube">YT</a>
               </div>
             </div>
             

@@ -29,11 +29,10 @@ const MobileNav = ({
         {/* Header */}
         <div className="mobile-nav-header">
           <div className="mobile-nav-brand">
-            <span className="brand-icon">🏛️</span>
             <span className="brand-text">HIMLAYAN</span>
           </div>
           <button className="mobile-nav-close" onClick={onClose}>
-            ✕
+            Close
           </button>
         </div>
 
@@ -82,12 +81,10 @@ const MobileNav = ({
         {/* Footer Actions */}
         <div className="mobile-nav-footer">
           <button className="mobile-nav-item" onClick={() => {}}>
-            <span className="nav-icon">⚙️</span>
             <span className="nav-label">Settings</span>
           </button>
           {onLogout && (
             <button className="mobile-nav-item logout" onClick={onLogout}>
-              <span className="nav-icon">🚪</span>
               <span className="nav-label">Logout</span>
             </button>
           )}

@@ -88,6 +88,27 @@
   min-height: 120px;
 }
 
+/* Star Rating */
+.star-rating {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.star-rating .star {
+  font-size: 2rem;
+  color: #d1d5db;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.1s ease;
+}
+
+.star-rating .star:hover {
+  transform: scale(1.1);
+}
+
+.star-rating .star.filled {
+  color: #f59e0b;
+}
+
 .char-count {
   display: block;
   text-align: right;

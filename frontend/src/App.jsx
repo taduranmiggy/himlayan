@@ -25,6 +25,11 @@ import MemberServicesPage from './pages/MemberServicesPage';
 import MemberContactPage from './pages/MemberContactPage';
 import QRScannerPage from './pages/QRScannerPage';
 import ProfilePage from './pages/ProfilePage';
+import UserManagementPage from './pages/UserManagementPage';
+import AnnouncementManagementPage from './pages/AnnouncementManagementPage';
+import ServiceRequestManagementPage from './pages/ServiceRequestManagementPage';
+import PaymentManagementPage from './pages/PaymentManagementPage';
+import FeedbackManagementPage from './pages/FeedbackManagementPage';
 import FeedbackPage from './pages/FeedbackPage';
 import AnnouncementsPage from './pages/AnnouncementsPage';
 import PayDuesPage from './pages/PayDuesPage';
@@ -86,6 +91,46 @@ function App() {
             element={
               <ProtectedRoute roles={['admin', 'staff']}>
                 <MapPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/users"
+            element={
+              <ProtectedRoute roles={['admin']}>
+                <UserManagementPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/announcements"
+            element={
+              <ProtectedRoute roles={['admin', 'staff']}>
+                <AnnouncementManagementPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/service-requests"
+            element={
+              <ProtectedRoute roles={['admin', 'staff']}>
+                <ServiceRequestManagementPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/payments"
+            element={
+              <ProtectedRoute roles={['admin', 'staff']}>
+                <PaymentManagementPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/feedback"
+            element={
+              <ProtectedRoute roles={['admin', 'staff']}>
+                <FeedbackManagementPage />
               </ProtectedRoute>
             }
           />

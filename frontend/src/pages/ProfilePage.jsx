@@ -72,7 +72,7 @@ const ProfilePage = () => {
             </span>
             {isEditing && (
               <button className="avatar-edit" title="Change photo">
-                📷
+                Edit
               </button>
             )}
           </div>
@@ -166,7 +166,7 @@ const ProfilePage = () => {
                     className="btn btn-outline"
                     onClick={() => setIsEditing(true)}
                   >
-                    ✏️ Edit Profile
+                    Edit Profile
                   </button>
                   <button 
                     type="button" 
@@ -184,19 +184,19 @@ const ProfilePage = () => {
         {/* Additional Profile Sections */}
         <div className="profile-sections">
           <div className="profile-section">
-            <h3>🔒 Security</h3>
+            <h3>Security</h3>
             <p>Manage your password and security settings</p>
             <button className="btn btn-outline btn-sm">Change Password</button>
           </div>
 
           <div className="profile-section">
-            <h3>📋 My Records</h3>
+            <h3>My Records</h3>
             <p>View burial records associated with your account</p>
             <button className="btn btn-outline btn-sm">View Records</button>
           </div>
 
           <div className="profile-section">
-            <h3>💳 Payment History</h3>
+            <h3>Payment History</h3>
             <p>View your payment and dues history</p>
             <button className="btn btn-outline btn-sm">View History</button>
           </div>

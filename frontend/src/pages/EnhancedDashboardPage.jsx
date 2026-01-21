@@ -100,7 +100,7 @@ const EnhancedDashboardPage = () => {
     return (
       <Layout>
         <div className="error-state">
-          <span className="error-icon">⚠️</span>
+          <span className="error-icon"></span>
           <h3>Something went wrong</h3>
           <p>{error}</p>
           <button className="btn btn-primary" onClick={handleRefresh}>
@@ -138,7 +138,7 @@ const EnhancedDashboardPage = () => {
             <span>⌘</span> Command
           </button>
           <button className="btn btn-primary" onClick={handleRefresh}>
-            🔄 Refresh
+            Refresh
           </button>
         </div>
       </div>
@@ -150,26 +150,26 @@ const EnhancedDashboardPage = () => {
           <StatCard
             title="Total Plots"
             value={stats?.plots?.total || 0}
-            icon="🗺️"
+            icon=""
             variant="primary"
             trend={{ value: 12, direction: 'up', label: 'vs last month' }}
           />
           <StatCard
             title="Available"
             value={stats?.plots?.available || 0}
-            icon="✅"
+            icon=""
             variant="success"
           />
           <StatCard
             title="Occupied"
             value={stats?.plots?.occupied || 0}
-            icon="📍"
+            icon=""
             variant="warning"
           />
           <StatCard
             title="Reserved"
             value={stats?.plots?.reserved || 0}
-            icon="🔒"
+            icon=""
             variant="error"
           />
         </div>
@@ -222,10 +222,10 @@ const EnhancedDashboardPage = () => {
               />
               <p className="chart-note">
                 {occupancyRate > 80 
-                  ? '⚠️ Capacity nearly full' 
+                  ? 'Capacity nearly full' 
                   : occupancyRate > 60 
                     ? 'Moderate occupancy' 
-                    : '✅ Good availability'}
+                    : 'Good availability'}
               </p>
             </div>
           </div>
@@ -239,19 +239,19 @@ const EnhancedDashboardPage = () => {
           <StatCard
             title="Total Burials"
             value={stats?.burials?.total || 0}
-            icon="📋"
+            icon=""
             variant="primary"
           />
           <StatCard
             title="This Month"
             value={stats?.burials?.this_month || 0}
-            icon="📅"
+            icon=""
             trend={{ value: 5, direction: 'up', label: 'from last month' }}
           />
           <StatCard
             title="This Year"
             value={stats?.burials?.this_year || 0}
-            icon="📊"
+            icon=""
             trend={{ value: 8, direction: 'up', label: 'from last year' }}
           />
         </div>
@@ -305,7 +305,6 @@ const EnhancedDashboardPage = () => {
                 </table>
               ) : (
                 <div className="empty-state">
-                  <span>📭</span>
                   <p>No recent burials</p>
                 </div>
               )}

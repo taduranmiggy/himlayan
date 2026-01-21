@@ -34,10 +34,10 @@ const PayDuesPage = () => {
   ];
 
   const paymentMethods = [
-    { id: 'gcash', name: 'GCash', icon: '📱' },
-    { id: 'maya', name: 'Maya', icon: '💳' },
-    { id: 'bank', name: 'Bank Transfer', icon: '🏦' },
-    { id: 'card', name: 'Credit/Debit Card', icon: '💳' },
+    { id: 'gcash', name: 'GCash', icon: '' },
+    { id: 'maya', name: 'Maya', icon: '' },
+    { id: 'bank', name: 'Bank Transfer', icon: '' },
+    { id: 'card', name: 'Credit/Debit Card', icon: '' },
   ];
 
   const handlePayment = () => {
@@ -94,7 +94,7 @@ const PayDuesPage = () => {
                 >
                   <div className="due-status">
                     <span className={`status-badge ${plot.status}`}>
-                      {plot.status === 'overdue' ? '⚠️ Overdue' : '🕐 Pending'}
+                      {plot.status === 'overdue' ? 'Overdue' : 'Pending'}
                     </span>
                   </div>
                   
@@ -122,7 +122,7 @@ const PayDuesPage = () => {
 
             {plotDues.length === 0 && (
               <div className="no-dues">
-                <span className="empty-icon">✅</span>
+                <span className="empty-icon"></span>
                 <p>No outstanding dues</p>
                 <span>All your payments are up to date!</span>
               </div>
@@ -175,12 +175,11 @@ const PayDuesPage = () => {
                 </button>
 
                 <p className="payment-note">
-                  🔒 Secured by SSL encryption. Your payment information is safe.
+                  Secured by SSL encryption. Your payment information is safe.
                 </p>
               </div>
             ) : (
               <div className="no-selection">
-                <span className="select-icon">👈</span>
                 <p>Select a plot to view payment details</p>
               </div>
             )}
@@ -190,7 +189,7 @@ const PayDuesPage = () => {
         {/* Payment History Link */}
         <div className="history-link">
           <button className="btn btn-outline">
-            📋 View Payment History
+            View Payment History
           </button>
         </div>
       </div>

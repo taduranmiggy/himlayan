@@ -103,12 +103,12 @@ const MemberMapPage = () => {
   ];
 
   const landmarks = [
-    { name: 'Main Gate', icon: '🚪' },
-    { name: 'Chapel', icon: '⛪' },
-    { name: 'Admin Office', icon: '🏢' },
-    { name: 'Parking Area', icon: '🅿️' },
-    { name: 'Comfort Room', icon: '🚻' },
-    { name: 'Waiting Shed', icon: '🛖' }
+    { name: 'Main Gate', icon: '' },
+    { name: 'Chapel', icon: '' },
+    { name: 'Admin Office', icon: '' },
+    { name: 'Parking Area', icon: '' },
+    { name: 'Comfort Room', icon: '' },
+    { name: 'Waiting Shed', icon: '' }
   ];
 
   return (

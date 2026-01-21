@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
 import PublicLayout from '../components/common/PublicLayout';
 import { useToast } from '../context/ToastContext';
+import api from '../services/api';
 import './FeedbackPage.css';
 
 const FeedbackPage = () => {
   const toast = useToast();
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [hoverRating, setHoverRating] = useState(0);
   
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    category: 'general',
+    subject: '',
     message: '',
   });
 
@@ -30,21 +33,31 @@ const FeedbackPage = () => {
 
     setLoading(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      toast?.success('Thank you for your feedback!');
-      setSubmitted(true);
+    try {
+      const response = await api.post('/feedback', {
+        ...formData,
+        rating: rating > 0 ? rating : null
+      });
+      
+      if (response.data.success) {
+        toast?.success('Thank you for your feedback!');
+        setSubmitted(true);
+      }
+    } catch (error) {
+      toast?.error(error.response?.data?.message || 'Failed to submit feedback');
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   const handleReset = () => {
     setFormData({
       name: '',
       email: '',
-      category: 'general',
+      subject: '',
       message: '',
     });
+    setRating(0);
     setSubmitted(false);
   };
 
@@ -53,7 +66,7 @@ const FeedbackPage = () => {
       <PublicLayout>
         <div className="feedback-page">
           <div className="feedback-success">
-            <div className="success-icon">✅</div>
+            <div className="success-icon">Success</div>
             <h2>Thank You!</h2>
             <p>Your feedback has been submitted successfully.</p>
             <p className="success-note">We appreciate your input and will review it shortly.</p>
@@ -114,20 +127,32 @@ const FeedbackPage = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Category</label>
-              <select
-                name="category"
-                value={formData.category}
+              <label className="form-label">Subject</label>
+              <input
+                type="text"
+                name="subject"
+                value={formData.subject}
                 onChange={handleChange}
-                className="form-input form-select"
-              >
-                <option value="general">General Feedback</option>
-                <option value="services">Services</option>
-                <option value="facilities">Facilities</option>
-                <option value="website">Website/App</option>
-                <option value="complaint">Complaint</option>
-                <option value="suggestion">Suggestion</option>
-              </select>
+                className="form-input"
+                placeholder="What is your feedback about?"
+              />
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Rating (Optional)</label>
+              <div className="star-rating">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <span
+                    key={star}
+                    className={`star ${star <= (hoverRating || rating) ? 'filled' : ''}`}
+                    onClick={() => setRating(star)}
+                    onMouseEnter={() => setHoverRating(star)}
+                    onMouseLeave={() => setHoverRating(0)}
+                  >
+                    ★
+                  </span>
+                ))}
+              </div>
             </div>
 
             <div className="form-group">
@@ -152,7 +177,7 @@ const FeedbackPage = () => {
                 className="btn btn-primary btn-full"
                 disabled={loading}
               >
-                {loading ? 'Submitting...' : '📨 Submit Feedback'}
+                {loading ? 'Submitting...' : 'Submit Feedback'}
               </button>
               
               <button 
@@ -173,11 +198,9 @@ const FeedbackPage = () => {
           </p>
           <div className="contact-methods">
             <a href="tel:+6328123456" className="contact-item">
-              <span className="contact-icon">📞</span>
               <span>(02) 8123-456</span>
             </a>
             <a href="mailto:info@himlayan.ph" className="contact-item">
-              <span className="contact-icon">✉️</span>
               <span>info@himlayan.ph</span>
             </a>
           </div>

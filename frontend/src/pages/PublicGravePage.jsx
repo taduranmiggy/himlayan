@@ -50,7 +50,7 @@ const PublicGravePage = () => {
     return (
       <div className="public-grave-container">
         <div className="grave-profile" style={{ textAlign: 'center', padding: '60px' }}>
-          <h2 style={{ color: '#e94560' }}>❌</h2>
+          <h2 style={{ color: '#e94560' }}>Error</h2>
           <h3 style={{ marginTop: '20px' }}>Profile Not Found</h3>
           <p style={{ color: '#666', marginTop: '10px' }}>{error}</p>
         </div>
@@ -145,7 +145,7 @@ const PublicGravePage = () => {
                 className="btn btn-primary"
                 style={{ textDecoration: 'none' }}
               >
-                📍 Get Directions
+                Get Directions
               </a>
             </div>
           )}

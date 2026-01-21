@@ -3,15 +3,48 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import MemberHeader from '../components/common/MemberHeader';
 import MemberFooter from '../components/common/MemberFooter';
+import api from '../services/api';
 import '../styles/MemberServices.css';
 
 const MemberServicesPage = () => {
   const { user, logout } = useAuth();
   const [activeTab, setActiveTab] = useState('all');
   const [expandedFaq, setExpandedFaq] = useState(null);
+  const [showRequestModal, setShowRequestModal] = useState(false);
+  const [selectedService, setSelectedService] = useState(null);
+  const [requestForm, setRequestForm] = useState({
+    description: '',
+    preferred_date: '',
+    contact_number: ''
+  });
+  const [submitting, setSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   const handleLogout = async () => {
     await logout();
+  };
+
+  const openRequestModal = (service) => {
+    setSelectedService(service);
+    setRequestForm({ description: '', preferred_date: '', contact_number: '' });
+    setSubmitSuccess(false);
+    setShowRequestModal(true);
+  };
+
+  const handleSubmitRequest = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+    try {
+      await api.post('/service-requests', {
+        service_type: selectedService.title.toLowerCase().replace(/\s+/g, '_'),
+        ...requestForm
+      });
+      setSubmitSuccess(true);
+    } catch (error) {
+      alert(error.response?.data?.message || 'Failed to submit request');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const services = [
@@ -244,7 +277,7 @@ const MemberServicesPage = () => {
                 </ul>
                 <div className="service-footer">
                   <span className="service-price">{service.price}</span>
-                  <button className="inquire-btn">Inquire Now</button>
+                  <button className="inquire-btn" onClick={() => openRequestModal(service)}>Request Service</button>
                 </div>
               </div>
             </div>
@@ -359,6 +392,70 @@ const MemberServicesPage = () => {
           </div>
         </section>
       </main>
+
+      {/* Service Request Modal */}
+      {showRequestModal && (
+        <div className="modal-overlay" onClick={() => setShowRequestModal(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <button className="modal-close" onClick={() => setShowRequestModal(false)}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M18 6L6 18M6 6l12 12"/>
+              </svg>
+            </button>
+            
+            {submitSuccess ? (
+              <div className="success-message">
+                <div className="success-icon">Success</div>
+                <h2>Request Submitted!</h2>
+                <p>Thank you for your interest in <strong>{selectedService?.title}</strong>.</p>
+                <p>Our team will contact you within 24-48 hours.</p>
+                <button className="btn-primary" onClick={() => setShowRequestModal(false)}>Close</button>
+              </div>
+            ) : (
+              <>
+                <h2>Request: {selectedService?.title}</h2>
+                <p className="modal-subtitle">{selectedService?.subtitle}</p>
+                
+                <form onSubmit={handleSubmitRequest}>
+                  <div className="form-group">
+                    <label>Preferred Date (Optional)</label>
+                    <input
+                      type="date"
+                      value={requestForm.preferred_date}
+                      onChange={(e) => setRequestForm({...requestForm, preferred_date: e.target.value})}
+                      min={new Date().toISOString().split('T')[0]}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Contact Number</label>
+                    <input
+                      type="tel"
+                      value={requestForm.contact_number}
+                      onChange={(e) => setRequestForm({...requestForm, contact_number: e.target.value})}
+                      placeholder="09XX XXX XXXX"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Additional Details</label>
+                    <textarea
+                      rows="4"
+                      value={requestForm.description}
+                      onChange={(e) => setRequestForm({...requestForm, description: e.target.value})}
+                      placeholder="Tell us more about your requirements..."
+                    />
+                  </div>
+                  <div className="form-actions">
+                    <button type="button" className="btn-cancel" onClick={() => setShowRequestModal(false)}>Cancel</button>
+                    <button type="submit" className="btn-submit" disabled={submitting}>
+                      {submitting ? 'Submitting...' : 'Submit Request'}
+                    </button>
+                  </div>
+                </form>
+              </>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Footer */}
       <MemberFooter />

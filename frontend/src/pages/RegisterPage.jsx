@@ -195,7 +195,7 @@ const RegisterPage = () => {
                       className="cyl-password-toggle"
                       onClick={() => setShowPassword(!showPassword)}
                     >
-                      {showPassword ? '👁️' : '👁️‍🗨️'}
+                      {showPassword ? 'Hide' : 'Show'}
                     </button>
                   </div>
                 </div>
@@ -215,7 +215,7 @@ const RegisterPage = () => {
                       className="cyl-password-toggle"
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                     >
-                      {showConfirmPassword ? '👁️' : '👁️‍🗨️'}
+                      {showConfirmPassword ? 'Hide' : 'Show'}
                     </button>
                   </div>
                 </div>

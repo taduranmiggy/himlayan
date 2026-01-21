@@ -129,7 +129,6 @@ const QRScannerPage = () => {
                 />
               ) : (
                 <div className="camera-placeholder">
-                  <span className="camera-icon">📷</span>
                   <p>Camera Preview</p>
                   <span className="camera-hint">Position QR code within frame</span>
                 </div>
@@ -146,7 +145,6 @@ const QRScannerPage = () => {
               className={`btn-scan ${isScanning ? 'scanning' : ''}`}
               onClick={isScanning ? stopScanning : startScanning}
             >
-              <span className="btn-icon">{isScanning ? '⏹️' : '📱'}</span>
               {isScanning ? 'Stop Scanning' : 'Start Scanning'}
             </button>
 
@@ -178,7 +176,6 @@ const QRScannerPage = () => {
             ) : graveInfo ? (
               <div className="grave-info">
                 <div className="info-header">
-                  <span className="info-icon">🕊️</span>
                   <h3>{graveInfo.deceased_name}</h3>
                 </div>
                 
@@ -213,10 +210,10 @@ const QRScannerPage = () => {
 
                 <div className="info-actions">
                   <button className="btn-action btn-primary">
-                    📍 View on Map
+                    View on Map
                   </button>
                   <button className="btn-action btn-secondary">
-                    🧭 Get Directions
+                    Get Directions
                   </button>
                 </div>
               </div>

@@ -13,7 +13,6 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-brand">
-        <span className="navbar-logo">🏛️</span>
         <h1>Himlayan</h1>
       </div>
       <div className="navbar-actions">

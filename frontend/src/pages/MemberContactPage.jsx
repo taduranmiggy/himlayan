@@ -34,7 +34,7 @@ const MemberContactPage = () => {
       {/* Main Content */}
       <main className="member-main">
         <section className="welcome-section">
-          <h2>📞 Contact Us</h2>
+          <h2>Contact Us</h2>
           <p>We are ready to help with your inquiries</p>
         </section>
 
@@ -46,11 +46,10 @@ const MemberContactPage = () => {
             padding: '30px',
             boxShadow: '0 5px 20px rgba(0,0,0,0.08)'
           }}>
-            <h3 style={{ color: '#1a472a', marginBottom: '25px' }}>📍 Contact Information</h3>
+            <h3 style={{ color: '#1a472a', marginBottom: '25px' }}>Contact Information</h3>
             
             <div style={{ marginBottom: '25px' }}>
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '15px', marginBottom: '20px' }}>
-                <span style={{ fontSize: '1.5rem' }}>📍</span>
                 <div>
                   <strong style={{ color: '#1a472a', display: 'block', marginBottom: '5px' }}>Address</strong>
                   <p style={{ color: '#666', margin: 0, lineHeight: '1.6' }}>
@@ -62,7 +61,6 @@ const MemberContactPage = () => {
               </div>
 
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '15px', marginBottom: '20px' }}>
-                <span style={{ fontSize: '1.5rem' }}>📞</span>
                 <div>
                   <strong style={{ color: '#1a472a', display: 'block', marginBottom: '5px' }}>Telephone</strong>
                   <p style={{ color: '#666', margin: 0 }}>
@@ -73,7 +71,6 @@ const MemberContactPage = () => {
               </div>
 
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '15px', marginBottom: '20px' }}>
-                <span style={{ fontSize: '1.5rem' }}>📧</span>
                 <div>
                   <strong style={{ color: '#1a472a', display: 'block', marginBottom: '5px' }}>Email</strong>
                   <p style={{ color: '#666', margin: 0 }}>
@@ -83,11 +80,10 @@ const MemberContactPage = () => {
               </div>
 
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '15px' }}>
-                <span style={{ fontSize: '1.5rem' }}>🕐</span>
                 <div>
-                  <strong style={{ color: '#1a472a', display: 'block', marginBottom: '5px' }}>Oras ng Opisina</strong>
+                  <strong style={{ color: '#1a472a', display: 'block', marginBottom: '5px' }}>Office Hours</strong>
                   <p style={{ color: '#666', margin: 0 }}>
-                    Lunes - Linggo: 6:00 AM - 6:00 PM<br />
+                    Monday - Sunday: 6:00 AM - 6:00 PM<br />
                     <em style={{ fontSize: '0.9rem' }}>Undas: 24 hours (Oct 31 - Nov 2)</em>
                   </p>
                 </div>
@@ -106,7 +102,7 @@ const MemberContactPage = () => {
                 alignItems: 'center',
                 gap: '8px'
               }}>
-                📞 Tumawag
+                Call Now
               </a>
               <a href="https://maps.google.com/?q=Himlayang+Pilipino+Memorial+Park+Quezon+City" 
                 target="_blank" 
@@ -121,7 +117,7 @@ const MemberContactPage = () => {
                   alignItems: 'center',
                   gap: '8px'
                 }}>
-                🗺️ Buksan sa Maps
+                Open in Maps
               </a>
             </div>
           </section>
@@ -133,7 +129,7 @@ const MemberContactPage = () => {
             padding: '30px',
             boxShadow: '0 5px 20px rgba(0,0,0,0.08)'
           }}>
-            <h3 style={{ color: '#1a472a', marginBottom: '25px' }}>✉️ Send a Message</h3>
+            <h3 style={{ color: '#1a472a', marginBottom: '25px' }}>Send a Message</h3>
             
             {submitted ? (
               <div style={{
@@ -144,7 +140,6 @@ const MemberContactPage = () => {
                 textAlign: 'center',
                 color: '#155724'
               }}>
-                <span style={{ fontSize: '2rem', display: 'block', marginBottom: '10px' }}>✅</span>
                 <strong>Your message has been sent!</strong>
                 <p style={{ margin: '10px 0 0' }}>You will receive a response within 24-48 hours.</p>
               </div>
@@ -248,7 +243,7 @@ const MemberContactPage = () => {
                     cursor: 'pointer'
                   }}
                 >
-                  📤 Send Message
+                  Send Message
                 </button>
               </form>
             )}
@@ -263,7 +258,7 @@ const MemberContactPage = () => {
           marginTop: '30px',
           borderLeft: '4px solid #ffc107'
         }}>
-          <h3 style={{ color: '#856404', marginBottom: '15px' }}>🚨 Emergency or Urgent Concern?</h3>
+          <h3 style={{ color: '#856404', marginBottom: '15px' }}>Emergency or Urgent Concern?</h3>
           <p style={{ color: '#856404', marginBottom: '15px' }}>
             For immediate assistance, call our hotline directly:
           </p>
@@ -278,7 +273,7 @@ const MemberContactPage = () => {
             alignItems: 'center',
             gap: '8px'
           }}>
-            📞 (02) 8921-6947
+            (02) 8921-6947
           </a>
         </section>
       </main>
