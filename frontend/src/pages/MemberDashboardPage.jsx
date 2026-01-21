@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import api from '../services/api';
+import MemberHeader from '../components/common/MemberHeader';
+import MemberFooter from '../components/common/MemberFooter';
 import '../styles/MemberDashboard.css';
 
 const MemberDashboardPage = () => {
@@ -11,12 +13,15 @@ const MemberDashboardPage = () => {
   const [loading, setLoading] = useState(false);
   const [myPlots, setMyPlots] = useState([]);
   const [announcements, setAnnouncements] = useState([]);
+  const [showQRModal, setShowQRModal] = useState(false);
+  const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
-    // Load member's reserved/owned plots
     loadMyPlots();
-    // Load announcements
     loadAnnouncements();
+    
+    const timer = setInterval(() => setCurrentTime(new Date()), 60000);
+    return () => clearInterval(timer);
   }, []);
 
   const loadMyPlots = async () => {
@@ -38,19 +43,27 @@ const MemberDashboardPage = () => {
         setAnnouncements(response.data.data || []);
       }
     } catch (err) {
-      // Default announcements if API not ready
       setAnnouncements([
         {
           id: 1,
-          title: 'Bukas ang Sementeryo ng Undas',
-          content: 'Oct 31 - Nov 2: 24 hours open para sa pagdalaw sa mga mahal sa buhay.',
-          date: '2025-10-25'
+          title: 'Cemetery Open for All Saints Day',
+          content: 'Oct 31 - Nov 2: Open 24 hours for visitors.',
+          date: '2025-10-25',
+          type: 'important'
         },
         {
           id: 2,
-          title: 'Bagong Memorial Garden',
-          content: 'Bagong section ng memorial garden ay bukas na para sa reservation.',
-          date: '2025-10-01'
+          title: 'New Memorial Garden',
+          content: 'A new section of the memorial garden is now open.',
+          date: '2025-10-01',
+          type: 'info'
+        },
+        {
+          id: 3,
+          title: 'Online Payment Available',
+          content: 'You can now pay your dues online.',
+          date: '2025-09-15',
+          type: 'success'
         }
       ]);
     }
@@ -78,63 +91,161 @@ const MemberDashboardPage = () => {
     await logout();
   };
 
+  const formatDate = (date) => {
+    return date.toLocaleDateString('en-PH', { 
+      weekday: 'long', 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    });
+  };
+
+  const formatTime = (date) => {
+    return date.toLocaleTimeString('en-PH', { 
+      hour: '2-digit', 
+      minute: '2-digit'
+    });
+  };
+
+  const getGreeting = () => {
+    const hour = currentTime.getHours();
+    if (hour < 12) return 'Good Morning';
+    if (hour < 18) return 'Good Afternoon';
+    return 'Good Evening';
+  };
+
   return (
-    <div className="member-dashboard">
+    <div className="member-dashboard-pro">
       {/* Header */}
-      <header className="member-header">
-        <div className="header-content">
-          <div className="logo">
-            <span className="logo-icon">🕊️</span>
-            <h1>Himlayan</h1>
-          </div>
-          <nav className="member-nav">
-            <Link to="/member/search" className="nav-link">Maghanap ng Puntod</Link>
-            <Link to="/member/map" className="nav-link">Mapa</Link>
-            <Link to="/member/services" className="nav-link">Mga Serbisyo</Link>
-          </nav>
-          <div className="user-menu">
-            <span className="user-name">👤 {user?.name}</span>
-            <button onClick={handleLogout} className="logout-btn">Logout</button>
-          </div>
-        </div>
-      </header>
+      <MemberHeader />
 
       {/* Main Content */}
-      <main className="member-main">
-        {/* Welcome Section */}
-        <section className="welcome-section">
-          <h2>Maligayang Pagdating, {user?.name}!</h2>
-          <p>Ito ang iyong Member Dashboard sa Himlayang Pilipino Memorial Park</p>
+      <main className="dashboard-main">
+        {/* Welcome Hero */}
+        <section className="welcome-hero">
+          <div className="welcome-content">
+            <div className="welcome-text">
+              <p className="greeting">{getGreeting()},</p>
+              <h1 className="welcome-name">{user?.name}!</h1>
+              <p className="welcome-subtitle">Welcome to your Himlayang Pilipino Dashboard</p>
+            </div>
+            <div className="welcome-info">
+              <div className="date-time">
+                <p className="current-date">{formatDate(currentTime)}</p>
+                <p className="current-time">{formatTime(currentTime)}</p>
+              </div>
+            </div>
+          </div>
         </section>
 
-        {/* Quick Search */}
-        <section className="search-section">
-          <h3>🔍 Maghanap ng Mahal sa Buhay</h3>
-          <form onSubmit={handleSearch} className="search-form">
-            <input
-              type="text"
-              placeholder="Ilagay ang pangalan ng hinahanap..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="search-input"
-            />
-            <button type="submit" className="search-btn" disabled={loading}>
-              {loading ? 'Naghahanap...' : 'Hanapin'}
+        {/* Quick Actions - Main Feature Cards */}
+        <section className="feature-cards">
+          <Link to="/member/search" className="feature-card find-grave">
+            <div className="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="m21 21-4.35-4.35"/>
+              </svg>
+            </div>
+            <div className="feature-content">
+              <h3>Find Grave</h3>
+              <p>Search and locate your loved ones' resting place</p>
+            </div>
+            <div className="feature-arrow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <line x1="5" y1="12" x2="19" y2="12"/>
+                <polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </div>
+          </Link>
+
+          <button onClick={() => setShowQRModal(true)} className="feature-card qr-scan">
+            <div className="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="3" y="3" width="7" height="7"/>
+                <rect x="14" y="3" width="7" height="7"/>
+                <rect x="3" y="14" width="7" height="7"/>
+                <rect x="14" y="14" width="3" height="3"/>
+                <line x1="21" y1="14" x2="21" y2="21"/>
+                <line x1="14" y1="21" x2="21" y2="21"/>
+              </svg>
+            </div>
+            <div className="feature-content">
+              <h3>QR Scan</h3>
+              <p>Scan grave QR code for instant information</p>
+            </div>
+            <div className="feature-arrow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <line x1="5" y1="12" x2="19" y2="12"/>
+                <polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </div>
+          </button>
+
+          <Link to="/pay-dues" className="feature-card pay-dues">
+            <div className="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                <line x1="1" y1="10" x2="23" y2="10"/>
+              </svg>
+            </div>
+            <div className="feature-content">
+              <h3>Pay Dues</h3>
+              <p>Settle maintenance fees and payments online</p>
+            </div>
+            <div className="feature-arrow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <line x1="5" y1="12" x2="19" y2="12"/>
+                <polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </div>
+          </Link>
+        </section>
+
+        {/* Search Section */}
+        <section className="search-section-pro">
+          <div className="search-header">
+            <h2>Quick Search</h2>
+            <p>Find a grave by name, plot number, or section</p>
+          </div>
+          <form onSubmit={handleSearch} className="search-form-pro">
+            <div className="search-input-wrapper">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="search-icon">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+              </svg>
+              <input
+                type="text"
+                placeholder="Enter name or plot number..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="search-input-pro"
+              />
+            </div>
+            <button type="submit" className="search-btn-pro" disabled={loading}>
+              {loading ? (
+                <span className="loading-spinner"></span>
+              ) : (
+                'Search'
+              )}
             </button>
           </form>
 
           {searchResults.length > 0 && (
-            <div className="search-results">
-              <h4>Mga Resulta:</h4>
+            <div className="search-results-pro">
               {searchResults.map((result) => (
-                <div key={result.id} className="result-card">
-                  <div className="result-info">
-                    <strong>{result.deceased_name}</strong>
-                    <span>Plot: {result.plot?.plot_number || 'N/A'}</span>
-                    <span>Section: {result.plot?.section || 'N/A'}</span>
+                <div key={result.id} className="result-card-pro">
+                  <div className="result-avatar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                      <circle cx="12" cy="7" r="4"/>
+                    </svg>
                   </div>
-                  <Link to={`/grave/${result.plot?.unique_code}`} className="view-btn">
-                    Tingnan
+                  <div className="result-info-pro">
+                    <h4>{result.deceased_name}</h4>
+                    <p>Plot: {result.plot?.plot_number || 'N/A'} • Section: {result.plot?.section || 'N/A'}</p>
+                  </div>
+                  <Link to={`/grave/${result.plot?.unique_code}`} className="result-btn-pro">
+                    View Details
                   </Link>
                 </div>
               ))}
@@ -142,105 +253,245 @@ const MemberDashboardPage = () => {
           )}
         </section>
 
-        {/* Quick Actions Grid */}
-        <section className="quick-actions">
-          <h3>Mga Mabilisang Aksyon</h3>
-          <div className="actions-grid">
-            <Link to="/member/search" className="action-card">
-              <span className="action-icon">🔍</span>
-              <span className="action-label">Maghanap ng Puntod</span>
-            </Link>
-            <Link to="/member/map" className="action-card">
-              <span className="action-icon">🗺️</span>
-              <span className="action-label">Tingnan ang Mapa</span>
-            </Link>
-            <Link to="/member/services" className="action-card">
-              <span className="action-icon">📋</span>
-              <span className="action-label">Mga Serbisyo</span>
-            </Link>
-            <Link to="/member/contact" className="action-card">
-              <span className="action-icon">📞</span>
-              <span className="action-label">Makipag-ugnayan</span>
-            </Link>
+        {/* Stats Overview */}
+        <section className="stats-overview">
+          <div className="stat-card">
+            <div className="stat-icon plots">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+            </div>
+            <div className="stat-info">
+              <span className="stat-number">{myPlots.length}</span>
+              <span className="stat-label">My Plots</span>
+            </div>
+          </div>
+
+          <div className="stat-card">
+            <div className="stat-icon pending">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+            </div>
+            <div className="stat-info">
+              <span className="stat-number">0</span>
+              <span className="stat-label">Pending Payments</span>
+            </div>
+          </div>
+
+          <div className="stat-card">
+            <div className="stat-icon visits">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+                <line x1="3" y1="10" x2="21" y2="10"/>
+              </svg>
+            </div>
+            <div className="stat-info">
+              <span className="stat-number">12</span>
+              <span className="stat-label">Visits This Year</span>
+            </div>
+          </div>
+
+          <div className="stat-card">
+            <div className="stat-icon requests">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="12" y1="18" x2="12" y2="12"/>
+                <line x1="9" y1="15" x2="15" y2="15"/>
+              </svg>
+            </div>
+            <div className="stat-info">
+              <span className="stat-number">2</span>
+              <span className="stat-label">Service Requests</span>
+            </div>
           </div>
         </section>
 
         {/* Two Column Layout */}
-        <div className="dashboard-grid">
-          {/* My Plots Section */}
-          <section className="my-plots-section">
-            <h3>📍 Mga Plot Ko</h3>
+        <div className="dashboard-columns">
+          {/* My Plots */}
+          <section className="plots-section-pro">
+            <div className="section-header">
+              <h2>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                  <circle cx="12" cy="10" r="3"/>
+                </svg>
+                My Plots
+              </h2>
+              <Link to="/member/plots" className="see-all-link">View All</Link>
+            </div>
+            
             {myPlots.length > 0 ? (
-              <div className="plots-list">
-                {myPlots.map((plot) => (
-                  <div key={plot.id} className="plot-card">
-                    <div className="plot-header">
-                      <strong>{plot.plot_number}</strong>
-                      <span className={`status-badge ${plot.status}`}>{plot.status}</span>
+              <div className="plots-list-pro">
+                {myPlots.slice(0, 3).map((plot) => (
+                  <div key={plot.id} className="plot-card-pro">
+                    <div className="plot-icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                      </svg>
                     </div>
-                    <div className="plot-details">
-                      <span>Section: {plot.section}</span>
-                      <span>Block: {plot.block}</span>
+                    <div className="plot-info">
+                      <h4>{plot.plot_number}</h4>
+                      <p>Section {plot.section} • Block {plot.block}</p>
                     </div>
-                    <Link to={`/grave/${plot.unique_code}`} className="plot-link">
-                      Tingnan ang Detalye →
-                    </Link>
+                    <span className={`status-tag ${plot.status}`}>{plot.status}</span>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="empty-state">
-                <p>Wala ka pang naka-reserve o pag-aari na plot.</p>
-                <Link to="/member/services" className="cta-btn">
-                  Mag-inquire Ngayon
-                </Link>
+              <div className="empty-state-pro">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                  <circle cx="12" cy="10" r="3"/>
+                </svg>
+                <h4>No Plots Yet</h4>
+                <p>You haven't reserved or purchased any plots yet.</p>
+                <Link to="/member/services" className="empty-cta">Inquire Now</Link>
               </div>
             )}
           </section>
 
-          {/* Announcements Section */}
-          <section className="announcements-section">
-            <h3>📢 Mga Anunsyo</h3>
-            <div className="announcements-list">
+          {/* Announcements */}
+          <section className="announcements-section-pro">
+            <div className="section-header">
+              <h2>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3zm-8.27 4a2 2 0 0 1-3.46 0"/>
+                </svg>
+                Announcements
+              </h2>
+              <Link to="/member/announcements" className="see-all-link">View All</Link>
+            </div>
+            
+            <div className="announcements-list-pro">
               {announcements.map((announcement) => (
-                <div key={announcement.id} className="announcement-card">
-                  <h4>{announcement.title}</h4>
-                  <p>{announcement.content}</p>
-                  <span className="announcement-date">{announcement.date}</span>
+                <div key={announcement.id} className={`announcement-card-pro ${announcement.type}`}>
+                  <div className="announcement-indicator"></div>
+                  <div className="announcement-content">
+                    <h4>{announcement.title}</h4>
+                    <p>{announcement.content}</p>
+                    <span className="announcement-date">{announcement.date}</span>
+                  </div>
                 </div>
               ))}
             </div>
           </section>
         </div>
 
-        {/* Contact Information */}
-        <section className="contact-section">
-          <h3>📞 Kailangan ng Tulong?</h3>
-          <div className="contact-grid">
-            <div className="contact-card">
-              <span className="contact-icon">📍</span>
-              <strong>Address</strong>
-              <p>240 Tandang Sora Ave, Quezon City, Metro Manila</p>
-            </div>
-            <div className="contact-card">
-              <span className="contact-icon">📞</span>
-              <strong>Telepono</strong>
-              <p>(02) 8921-6947</p>
-              <p>(02) 8453-4057</p>
-            </div>
-            <div className="contact-card">
-              <span className="contact-icon">🕐</span>
-              <strong>Oras ng Opisina</strong>
-              <p>Lunes - Linggo: 6:00 AM - 6:00 PM</p>
-            </div>
+        {/* Quick Links */}
+        <section className="quick-links-section">
+          <div className="section-header">
+            <h2>Quick Links</h2>
+          </div>
+          <div className="quick-links-grid">
+            <Link to="/member/map" className="quick-link-card">
+              <div className="quick-link-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/>
+                  <line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/>
+                </svg>
+              </div>
+              <span>Cemetery Map</span>
+            </Link>
+            <Link to="/member/history" className="quick-link-card">
+              <div className="quick-link-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+              </div>
+              <span>Payment History</span>
+            </Link>
+            <Link to="/member/services" className="quick-link-card">
+              <div className="quick-link-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                </svg>
+              </div>
+              <span>Maintenance Request</span>
+            </Link>
+            <Link to="/member/schedule" className="quick-link-card">
+              <div className="quick-link-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                  <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+                  <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+              </div>
+              <span>Schedule Visit</span>
+            </Link>
+            <Link to="/member/contact" className="quick-link-card">
+              <div className="quick-link-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                </svg>
+              </div>
+              <span>Contact Us</span>
+            </Link>
+            <Link to="/member/help" className="quick-link-card">
+              <div className="quick-link-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                  <line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+              </div>
+              <span>Help & FAQ</span>
+            </Link>
           </div>
         </section>
       </main>
 
       {/* Footer */}
-      <footer className="member-footer">
-        <p>© 2025 Himlayang Pilipino Memorial Park. Lahat ng Karapatan ay Nakalaan.</p>
-      </footer>
+      <MemberFooter />
+
+      {/* QR Scanner Modal */}
+      {showQRModal && (
+        <div className="modal-overlay" onClick={() => setShowQRModal(false)}>
+          <div className="modal-content qr-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close" onClick={() => setShowQRModal(false)}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+            <div className="qr-scanner-container">
+              <div className="qr-icon-large">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <rect x="3" y="3" width="7" height="7"/>
+                  <rect x="14" y="3" width="7" height="7"/>
+                  <rect x="3" y="14" width="7" height="7"/>
+                  <rect x="14" y="14" width="3" height="3"/>
+                  <line x1="21" y1="14" x2="21" y2="21"/>
+                  <line x1="14" y1="21" x2="21" y2="21"/>
+                </svg>
+              </div>
+              <h3>Scan QR Code</h3>
+              <p>Point your camera at a grave's QR code to access information</p>
+              <div className="qr-camera-placeholder">
+                <div className="camera-frame">
+                  <div className="corner tl"></div>
+                  <div className="corner tr"></div>
+                  <div className="corner bl"></div>
+                  <div className="corner br"></div>
+                </div>
+                <p>Camera will appear here</p>
+              </div>
+              <button className="start-camera-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                  <circle cx="12" cy="13" r="4"/>
+                </svg>
+                Enable Camera
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

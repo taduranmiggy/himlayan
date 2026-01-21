@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import MemberHeader from '../components/common/MemberHeader';
+import MemberFooter from '../components/common/MemberFooter';
 import '../styles/MemberDashboard.css';
 
 const MemberContactPage = () => {
@@ -27,32 +29,13 @@ const MemberContactPage = () => {
   return (
     <div className="member-dashboard">
       {/* Header */}
-      <header className="member-header">
-        <div className="header-content">
-          <div className="logo">
-            <span className="logo-icon">🕊️</span>
-            <Link to="/member/dashboard" style={{ textDecoration: 'none', color: 'white' }}>
-              <h1>Himlayan</h1>
-            </Link>
-          </div>
-          <nav className="member-nav">
-            <Link to="/member/dashboard" className="nav-link">Dashboard</Link>
-            <Link to="/member/search" className="nav-link">Maghanap ng Puntod</Link>
-            <Link to="/member/map" className="nav-link">Mapa</Link>
-            <Link to="/member/services" className="nav-link">Mga Serbisyo</Link>
-          </nav>
-          <div className="user-menu">
-            <span className="user-name">👤 {user?.name}</span>
-            <button onClick={handleLogout} className="logout-btn">Logout</button>
-          </div>
-        </div>
-      </header>
+      <MemberHeader />
 
       {/* Main Content */}
       <main className="member-main">
         <section className="welcome-section">
-          <h2>📞 Makipag-ugnayan</h2>
-          <p>Kami ay handang tumulong sa inyong mga katanungan</p>
+          <h2>📞 Contact Us</h2>
+          <p>We are ready to help with your inquiries</p>
         </section>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '30px' }}>
@@ -63,7 +46,7 @@ const MemberContactPage = () => {
             padding: '30px',
             boxShadow: '0 5px 20px rgba(0,0,0,0.08)'
           }}>
-            <h3 style={{ color: '#1a472a', marginBottom: '25px' }}>📍 Impormasyon sa Pakikipag-ugnayan</h3>
+            <h3 style={{ color: '#1a472a', marginBottom: '25px' }}>📍 Contact Information</h3>
             
             <div style={{ marginBottom: '25px' }}>
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '15px', marginBottom: '20px' }}>
@@ -150,7 +133,7 @@ const MemberContactPage = () => {
             padding: '30px',
             boxShadow: '0 5px 20px rgba(0,0,0,0.08)'
           }}>
-            <h3 style={{ color: '#1a472a', marginBottom: '25px' }}>✉️ Mag-send ng Mensahe</h3>
+            <h3 style={{ color: '#1a472a', marginBottom: '25px' }}>✉️ Send a Message</h3>
             
             {submitted ? (
               <div style={{
@@ -162,14 +145,14 @@ const MemberContactPage = () => {
                 color: '#155724'
               }}>
                 <span style={{ fontSize: '2rem', display: 'block', marginBottom: '10px' }}>✅</span>
-                <strong>Naipadala na ang iyong mensahe!</strong>
-                <p style={{ margin: '10px 0 0' }}>Makakatanggap ka ng sagot sa loob ng 24-48 oras.</p>
+                <strong>Your message has been sent!</strong>
+                <p style={{ margin: '10px 0 0' }}>You will receive a response within 24-48 hours.</p>
               </div>
             ) : (
               <form onSubmit={handleSubmit}>
                 <div style={{ marginBottom: '20px' }}>
                   <label style={{ display: 'block', marginBottom: '8px', color: '#333', fontWeight: '500' }}>
-                    Iyong Pangalan
+                    Your Name
                   </label>
                   <input
                     type="text"
@@ -188,7 +171,7 @@ const MemberContactPage = () => {
 
                 <div style={{ marginBottom: '20px' }}>
                   <label style={{ display: 'block', marginBottom: '8px', color: '#333', fontWeight: '500' }}>
-                    Iyong Email
+                    Your Email
                   </label>
                   <input
                     type="email"
@@ -221,26 +204,26 @@ const MemberContactPage = () => {
                       background: 'white'
                     }}
                   >
-                    <option value="">Piliin ang paksa...</option>
+                    <option value="">Select a subject...</option>
                     <option value="inquiry">General Inquiry</option>
                     <option value="reservation">Lot Reservation</option>
                     <option value="pricing">Pricing Information</option>
                     <option value="visitation">Visitation Assistance</option>
                     <option value="maintenance">Maintenance Concern</option>
-                    <option value="other">Iba pa</option>
+                    <option value="other">Other</option>
                   </select>
                 </div>
 
                 <div style={{ marginBottom: '20px' }}>
                   <label style={{ display: 'block', marginBottom: '8px', color: '#333', fontWeight: '500' }}>
-                    Mensahe *
+                    Message *
                   </label>
                   <textarea
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     required
                     rows={5}
-                    placeholder="Isulat dito ang iyong mensahe..."
+                    placeholder="Write your message here..."
                     style={{
                       width: '100%',
                       padding: '12px 15px',
@@ -265,7 +248,7 @@ const MemberContactPage = () => {
                     cursor: 'pointer'
                   }}
                 >
-                  📤 Ipadala ang Mensahe
+                  📤 Send Message
                 </button>
               </form>
             )}
@@ -280,9 +263,9 @@ const MemberContactPage = () => {
           marginTop: '30px',
           borderLeft: '4px solid #ffc107'
         }}>
-          <h3 style={{ color: '#856404', marginBottom: '15px' }}>🚨 Emergency o Urgent na Concern?</h3>
+          <h3 style={{ color: '#856404', marginBottom: '15px' }}>🚨 Emergency or Urgent Concern?</h3>
           <p style={{ color: '#856404', marginBottom: '15px' }}>
-            Para sa mabilisang tulong, tumawag direkta sa aming hotline:
+            For immediate assistance, call our hotline directly:
           </p>
           <a href="tel:+6328921-6947" style={{
             background: '#ffc107',
@@ -301,9 +284,7 @@ const MemberContactPage = () => {
       </main>
 
       {/* Footer */}
-      <footer className="member-footer">
-        <p>© 2025 Himlayang Pilipino Memorial Park. Lahat ng Karapatan ay Nakalaan.</p>
-      </footer>
+      <MemberFooter />
     </div>
   );
 };

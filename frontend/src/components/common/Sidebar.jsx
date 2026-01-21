@@ -8,7 +8,7 @@ const Sidebar = () => {
   return (
     <aside className="sidebar">
       <div className="sidebar-logo">
-        <span className="sidebar-logo-icon">🏔️</span>
+        <img src="/himlayan.png" alt="Himlayan" className="sidebar-logo-img" />
         <h2>Himlayan</h2>
         <p>Cemetery Management</p>
       </div>

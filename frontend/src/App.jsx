@@ -1,9 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
-import { ThemeProvider } from './context/ThemeContext';
 import { ToastProvider } from './context/ToastContext';
-import { LanguageProvider } from './context/LanguageContext';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import RoleBasedRedirect from './components/common/RoleBasedRedirect';
 
@@ -25,20 +23,28 @@ import MemberSearchPage from './pages/MemberSearchPage';
 import MemberMapPage from './pages/MemberMapPage';
 import MemberServicesPage from './pages/MemberServicesPage';
 import MemberContactPage from './pages/MemberContactPage';
+import QRScannerPage from './pages/QRScannerPage';
+import ProfilePage from './pages/ProfilePage';
+import FeedbackPage from './pages/FeedbackPage';
+import AnnouncementsPage from './pages/AnnouncementsPage';
+import PayDuesPage from './pages/PayDuesPage';
+import AuthCallback from './pages/AuthCallback';
 
 function App() {
   return (
-    <LanguageProvider>
-      <ThemeProvider>
-        <ToastProvider>
-          <AuthProvider>
-            <Router>
-              <Routes>
+    <ToastProvider>
+      <AuthProvider>
+        <Router>
+          <Routes>
             {/* Public Routes */}
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/auth/callback" element={<AuthCallback />} />
           <Route path="/grave/:code" element={<PublicGravePage />} />
+          <Route path="/qr-scan" element={<QRScannerPage />} />
+          <Route path="/feedback" element={<FeedbackPage />} />
+          <Route path="/announcements" element={<AnnouncementsPage />} />
 
           {/* Role-based Dashboard Redirect */}
           <Route
@@ -125,15 +131,29 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/pay-dues"
+            element={
+              <ProtectedRoute>
+                <PayDuesPage />
+              </ProtectedRoute>
+            }
+          />
 
           {/* Catch all - redirect to landing */}
           <Route path="*" element={<Navigate to="/" replace />} />
-              </Routes>
-            </Router>
-          </AuthProvider>
-        </ToastProvider>
-      </ThemeProvider>
-    </LanguageProvider>
+          </Routes>
+        </Router>
+      </AuthProvider>
+    </ToastProvider>
   );
 }
 

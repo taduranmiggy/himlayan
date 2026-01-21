@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\QrCodeController;
 use App\Http\Controllers\Api\MapController;
 use App\Http\Controllers\Api\PublicController;
 use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Auth\SocialAuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +27,10 @@ use App\Http\Controllers\Api\DashboardController;
 // Authentication
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
+
+// Social Authentication (OAuth)
+Route::get('/auth/{provider}/redirect', [SocialAuthController::class, 'redirect']);
+Route::get('/auth/{provider}/callback', [SocialAuthController::class, 'callback']);
 
 // Public grave profile (accessed via QR code)
 Route::get('/public/grave/{code}', [PublicController::class, 'graveProfile']);

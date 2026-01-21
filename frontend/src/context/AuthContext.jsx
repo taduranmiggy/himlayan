@@ -1,7 +1,16 @@
-import React, { createContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useState, useEffect, useCallback, useContext } from 'react';
 import authService from '../services/authService';
 
 export const AuthContext = createContext(null);
+
+// Custom hook for using auth context
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -53,12 +62,18 @@ export const AuthProvider = ({ children }) => {
     return roles.includes(user.role);
   }, [user]);
 
+  // Set user from social login (token already stored)
+  const setUserFromSocial = useCallback((userData) => {
+    setUser(userData);
+  }, []);
+
   const value = {
     user,
     loading,
     login,
     logout,
     hasRole,
+    setUserFromSocial,
     isAuthenticated: !!user,
     isAdmin: user?.role === 'admin',
     isStaff: user?.role === 'staff',

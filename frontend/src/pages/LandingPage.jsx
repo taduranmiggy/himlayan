@@ -1,19 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useLanguage } from '../context/LanguageContext';
-import LanguageSwitcher from '../components/common/LanguageSwitcher';
 
 const LandingPage = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { t } = useLanguage();
+  const [currentHeroImage, setCurrentHeroImage] = useState(0);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Hero slideshow images
+  const heroImages = [
+    '/himlayangpilipino.webp',
+    '/heritage_HD.png',
+    '/Panooran-2.jpg'
+  ];
+
+  // Gallery/Landmark images
+  const landmarks = [
+    { image: '/Florante-at-Laura-1-scaled.jpg', title: 'Florante at Laura', desc: 'Classic Filipino love story immortalized in bronze' },
+    { image: '/Gabriela-Silang-scaled.jpg', title: 'Gabriela Silang', desc: 'Revolutionary hero and warrior woman' },
+    { image: '/Malakas-at-Maganda.jpg', title: 'Malakas at Maganda', desc: 'Filipino creation myth sculpture' },
+    { image: '/Pugad-Lawin-scaled.jpg', title: 'Pugad Lawin', desc: 'Site of the Cry of Rebellion' },
+    { image: '/Teresa-Magbanua-scaled.jpg', title: 'Teresa Magbanua', desc: 'Visayan Joan of Arc' },
+    { image: '/Florante-at-Laura-2-scaled.jpg', title: 'Florante at Laura II', desc: 'Another view of the classic tale' },
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentHeroImage((prev) => (prev + 1) % heroImages.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [heroImages.length]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <div className="landing-page">
       {/* Navigation */}
-      <nav className="landing-nav">
+      <nav className={`landing-nav ${scrolled ? 'nav-scrolled' : 'nav-transparent'}`}>
         <div className="landing-nav-container">
           <Link to="/" className="landing-logo">
-            <span className="logo-icon">🏔️</span>
+            <img src="/himlayan.png" alt="Himlayan" className="logo-img" />
             <span className="logo-text">Himlayan</span>
           </Link>
 
@@ -25,368 +56,280 @@ const LandingPage = () => {
           </button>
 
           <ul className={`landing-nav-menu ${mobileMenuOpen ? 'open' : ''}`}>
-            <li><a href="#home">{t('nav.home')}</a></li>
+            <li><a href="#home">Home</a></li>
             <li><a href="#about">About</a></li>
-            <li><a href="#services">{t('nav.services')}</a></li>
-            <li><a href="#arts">Arts & Landmarks</a></li>
-            <li><a href="#contact">{t('nav.contact')}</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#gallery">Gallery</a></li>
+            <li><a href="#contact">Contact</a></li>
           </ul>
 
           <div className="landing-nav-actions">
-            <LanguageSwitcher variant="toggle" />
-            <Link to="/login" className="btn-nav-login">{t('auth.login')}</Link>
-            <Link to="/register" className="btn-nav-register">{t('landing.cta')}</Link>
+            <Link to="/login" className="btn-nav-login">Login</Link>
+            <Link to="/register" className="btn-nav-register">Get Started</Link>
           </div>
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section id="home" className="landing-hero">
-        <div className="hero-background">
-          <div className="hero-shape hero-shape-1"></div>
-          <div className="hero-shape hero-shape-2"></div>
-          <div className="hero-shape hero-shape-3"></div>
-        </div>
+      {/* Hero Section - Full Screen with Parallax */}
+      <section id="home" className="hero-fullscreen">
+        {heroImages.map((img, index) => (
+          <div 
+            key={index}
+            className={`hero-slide ${index === currentHeroImage ? 'active' : ''}`}
+            style={{ backgroundImage: `url(${img})` }}
+          />
+        ))}
+        <div className="hero-gradient-overlay"></div>
         
-        <div className="hero-content">
-          <div className="hero-text">
-            <span className="hero-badge">🌿 Premier Memorial Park in Quezon City</span>
-            <h1>Himlayang Pilipino<br /><span className="text-gradient">Memorial Park</span></h1>
-            <p>
-              A premier memorial park located in Barangay Pasong Tamo, Tandang Sora, Quezon City, 
-              Philippines. We offer a comprehensive range of burial products including columbaries, 
-              lawn lots, mausoleums, and memorial terraces — allowing families to choose a meaningful 
-              final resting place for their loved ones.
-            </p>
-            <div className="hero-buttons">
-              <Link to="/register" className="btn btn-hero-primary">
-                Get Started
-                <span>→</span>
-              </Link>
-              <a href="#services" className="btn btn-hero-secondary">
-                <span className="play-icon">▶</span>
-                Explore Services
-              </a>
-            </div>
-            <div className="hero-stats">
-              <div className="hero-stat">
-                <span className="stat-number">37+</span>
-                <span className="stat-label">Hectares</span>
-              </div>
-              <div className="hero-stat">
-                <span className="stat-number">1971</span>
-                <span className="stat-label">Established</span>
-              </div>
-              <div className="hero-stat">
-                <span className="stat-number">50+</span>
-                <span className="stat-label">Years of Service</span>
-              </div>
-            </div>
+        <div className="hero-content-wrapper">
+          <div className="hero-badge-top">
+            <span>🏔️ Since 1971</span>
+          </div>
+          <h1 className="hero-title">
+            <span className="hero-title-line">Himlayang</span>
+            <span className="hero-title-line accent">Pilipino</span>
+          </h1>
+          <p className="hero-subtitle">
+            A premier memorial park reflecting Filipino culture and values.<br/>
+            Over 37 hectares of serene, beautifully maintained grounds.
+          </p>
+          <div className="hero-cta-group">
+            <a href="#services" className="btn-hero-main">Explore Services</a>
+            <a href="#gallery" className="btn-hero-outline">View Gallery</a>
           </div>
           
-          <div className="hero-visual">
-            <div className="hero-card hero-card-main">
-              <div className="card-header-demo">
-                <span className="card-dot"></span>
-                <span className="card-dot"></span>
-                <span className="card-dot"></span>
-              </div>
-              <div className="card-content-demo">
-                <div className="demo-map">
-                  <div className="map-marker marker-1">📍</div>
-                  <div className="map-marker marker-2">📍</div>
-                  <div className="map-marker marker-3">📍</div>
-                </div>
-                <div className="demo-stats">
-                  <div className="demo-stat-item">
-                    <span className="demo-stat-icon">📊</span>
-                    <div>
-                      <span className="demo-stat-value">1,234</span>
-                      <span className="demo-stat-label">Total Plots</span>
-                    </div>
-                  </div>
-                  <div className="demo-stat-item">
-                    <span className="demo-stat-icon">✅</span>
-                    <div>
-                      <span className="demo-stat-value">456</span>
-                      <span className="demo-stat-label">Available</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="hero-card hero-card-float hero-card-qr">
-              <span className="float-icon">📱</span>
-              <span className="float-text">QR Scan</span>
-            </div>
-            
-            <div className="hero-card hero-card-float hero-card-location">
-              <span className="float-icon">🗺️</span>
-              <span className="float-text">GPS Navigate</span>
-            </div>
+          {/* Hero Slide Indicators */}
+          <div className="hero-indicators">
+            {heroImages.map((_, index) => (
+              <button 
+                key={index}
+                className={`indicator ${index === currentHeroImage ? 'active' : ''}`}
+                onClick={() => setCurrentHeroImage(index)}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Scroll Down Indicator */}
+        <div className="scroll-indicator">
+          <span>Scroll</span>
+          <div className="scroll-line"></div>
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="stats-section">
+        <div className="stats-container">
+          <div className="stat-item">
+            <span className="stat-number">50+</span>
+            <span className="stat-label">Years of Service</span>
+          </div>
+          <div className="stat-divider"></div>
+          <div className="stat-item">
+            <span className="stat-number">37</span>
+            <span className="stat-label">Hectares</span>
+          </div>
+          <div className="stat-divider"></div>
+          <div className="stat-item">
+            <span className="stat-number">10K+</span>
+            <span className="stat-label">Families Served</span>
+          </div>
+          <div className="stat-divider"></div>
+          <div className="stat-item">
+            <span className="stat-number">15+</span>
+            <span className="stat-label">Landmarks</span>
           </div>
         </div>
       </section>
 
-      {/* About Section */}
-      <section id="about" className="landing-section landing-about">
-        <div className="section-container">
-          <div className="section-header">
-            <span className="section-badge">About Us</span>
-            <h2>History and<br />Mission</h2>
-            <p>
-              Himlayang Pilipino, Inc. was established in 1971 when the Aguirre Group acquired 
-              a 5-hectare memorial park in Quezon City, which has since expanded to over 37 hectares. 
-              The park was developed to reflect Filipino culture and values, offering a respectful 
-              and serene environment for remembrance.
-            </p>
+      {/* About Section with Image */}
+      <section id="about" className="about-section">
+        <div className="about-container">
+          <div className="about-image-side">
+            <div className="about-image-wrapper">
+              <img src="/heritage_HD.png" alt="Himlayan Heritage" />
+              <div className="about-image-badge">
+                <span className="badge-year">Est. 1971</span>
+              </div>
+            </div>
           </div>
-          
-          <div className="about-grid">
-            <div className="about-card">
-              <div className="about-icon">🏛️</div>
-              <h3>Our Heritage</h3>
-              <p>
-                The park honors historical figures such as Melchora "Tandang Sora" Aquino and 
-                Emilio Jacinto, whose remains were once interred here, and showcases artwork 
-                and memorials that celebrate Filipino heritage.
-              </p>
+          <div className="about-content-side">
+            <span className="section-label">About Us</span>
+            <h2 className="section-title">A Legacy of <span>Honor</span> and <span>Remembrance</span></h2>
+            <p className="about-text">
+              Himlayang Pilipino, Inc. was established in 1971 when the Aguirre Group acquired 
+              a 5-hectare memorial park in Quezon City. Today, it has expanded to over 37 hectares, 
+              becoming one of the premier memorial parks in the Philippines.
+            </p>
+            <p className="about-text">
+              The park was developed to reflect Filipino culture and values, offering a respectful 
+              and serene environment for remembrance. It honors historical figures such as Melchora 
+              "Tandang Sora" Aquino and Emilio Jacinto.
+            </p>
+            <div className="about-features">
+              <div className="about-feature">
+                <div className="feature-icon">🏛️</div>
+                <div>
+                  <h4>Cultural Heritage</h4>
+                  <p>Preserving Filipino history through art and memorials</p>
+                </div>
+              </div>
+              <div className="about-feature">
+                <div className="feature-icon">💚</div>
+                <div>
+                  <h4>Compassionate Care</h4>
+                  <p>Supporting families with dignity and respect</p>
+                </div>
+              </div>
             </div>
-            <div className="about-card">
-              <div className="about-icon">💫</div>
-              <h3>Our Mission</h3>
-              <p>
-                Himlayang Pilipino is committed to providing compassionate care for the bereaved 
-                with the utmost respect and dignity, reflecting strong Filipino family ties 
-                and cultural values.
-              </p>
-            </div>
-            <div className="about-card">
-              <div className="about-icon">🌟</div>
-              <h3>Our Vision</h3>
-              <p>
-                To be the preferred final resting place in the country by offering quality 
-                services and spaces while preserving Filipino traditions and honoring the 
-                memory of loved ones.
-              </p>
-            </div>
+            <a href="#contact" className="btn-about-cta">Learn More About Us</a>
           </div>
         </div>
       </section>
 
       {/* Services Section */}
-      <section id="services" className="landing-section landing-services">
-        <div className="section-container">
-          <div className="section-header">
-            <span className="section-badge">Our Services</span>
-            <h2>Memorial Products & Services</h2>
-            <p>Comprehensive options designed to assist families during times of loss</p>
-          </div>
-          
-          <div className="services-grid">
-            <div className="service-card">
-              <div className="service-icon">🌿</div>
+      <section id="services" className="services-section">
+        <div className="services-header">
+          <span className="section-label">Our Services</span>
+          <h2 className="section-title">Memorial <span>Products</span> & <span>Services</span></h2>
+          <p>Comprehensive options designed to honor your loved ones with dignity</p>
+        </div>
+        
+        <div className="services-grid-new">
+          <div className="service-card-new service-featured" style={{backgroundImage: 'url(/Panooran-2.jpg)'}}>
+            <div className="service-overlay"></div>
+            <div className="service-content">
+              <span className="service-icon-new">🌿</span>
               <h3>Lawn Lots</h3>
-              <p>Beautifully maintained burial plots in serene garden settings</p>
+              <p>Beautifully maintained burial plots set in serene garden landscapes</p>
             </div>
-            <div className="service-card">
-              <div className="service-icon">🏛️</div>
+          </div>
+          <div className="service-card-new">
+            <div className="service-content">
+              <span className="service-icon-new">🏛️</span>
               <h3>Columbaries</h3>
               <p>Elegant niches for urns in peaceful, well-kept structures</p>
             </div>
-            <div className="service-card">
-              <div className="service-icon">🏰</div>
+          </div>
+          <div className="service-card-new">
+            <div className="service-content">
+              <span className="service-icon-new">🏰</span>
               <h3>Mausoleums</h3>
               <p>Stately family crypts and private memorial structures</p>
             </div>
-            <div className="service-card">
-              <div className="service-icon">⛰️</div>
+          </div>
+          <div className="service-card-new service-featured" style={{backgroundImage: 'url(/heritage_HD.png)'}}>
+            <div className="service-overlay"></div>
+            <div className="service-content">
+              <span className="service-icon-new">⛰️</span>
               <h3>Memorial Terraces</h3>
-              <p>Customized memorial spaces with scenic views</p>
+              <p>Customized memorial spaces with breathtaking scenic views</p>
             </div>
-            <div className="service-card">
-              <div className="service-icon">💜</div>
+          </div>
+          <div className="service-card-new">
+            <div className="service-content">
+              <span className="service-icon-new">💜</span>
               <h3>Bereavement Support</h3>
               <p>Compassionate support services for grieving families</p>
             </div>
-            <div className="service-card">
-              <div className="service-icon">📰</div>
-              <h3>Obituary Services</h3>
-              <p>Obituary postings and news/events updates</p>
+          </div>
+          <div className="service-card-new">
+            <div className="service-content">
+              <span className="service-icon-new">📱</span>
+              <h3>Digital Memorial</h3>
+              <p>QR-enabled grave profiles and online tributes</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Arts & Landmarks Section */}
-      <section id="arts" className="landing-section landing-features">
-        <div className="section-container">
-          <div className="features-content">
-            <div className="features-text">
-              <span className="section-badge">Arts & Landmarks</span>
-              <h2>Cultural Heritage</h2>
-              <p>
-                The park includes various sculptural artworks and shrines that reflect 
-                Filipino history and artistic heritage, offering visitors a meaningful 
-                cultural experience.
-              </p>
-              
-              <ul className="features-list">
-                <li>
-                  <span className="feature-check">🏛️</span>
-                  <div>
-                    <strong>Emilio Jacinto Shrine</strong>
-                    <p>Honoring the "Brains of the Katipunan"</p>
-                  </div>
-                </li>
-                <li>
-                  <span className="feature-check">🏛️</span>
-                  <div>
-                    <strong>Tandang Sora Shrine</strong>
-                    <p>Tribute to the "Mother of the Philippine Revolution"</p>
-                  </div>
-                </li>
-                <li>
-                  <span className="feature-check">🎨</span>
-                  <div>
-                    <strong>Malakas and Maganda</strong>
-                    <p>Sculptures of Filipino mythological figures</p>
-                  </div>
-                </li>
-                <li>
-                  <span className="feature-check">🌄</span>
-                  <div>
-                    <strong>Panooran Viewpoints</strong>
-                    <p>Culturally significant installations and scenic overlooks</p>
-                  </div>
-                </li>
-              </ul>
-              
-              <Link to="/register" className="btn btn-primary">
-                Plan Your Visit
-              </Link>
-            </div>
-            
-            <div className="features-visual">
-              <div className="feature-phone">
-                <div className="phone-screen">
-                  <div className="phone-header">
-                    <span>🏔️ Himlayan</span>
-                  </div>
-                  <div className="phone-content">
-                    <div className="phone-search">
-                      <span>🔍</span>
-                      <span>Search plots...</span>
-                    </div>
-                    <div className="phone-map-preview"></div>
-                    <div className="phone-result">
-                      <div className="result-avatar">HP</div>
-                      <div className="result-info">
-                        <span className="result-name">Himlayang Pilipino</span>
-                        <span className="result-location">Quezon City, PH</span>
-                      </div>
-                      <span className="result-arrow">→</span>
-                    </div>
-                  </div>
-                </div>
+      {/* Gallery / Landmarks Section */}
+      <section id="gallery" className="gallery-section">
+        <div className="gallery-header">
+          <span className="section-label">Arts & Landmarks</span>
+          <h2 className="section-title">Cultural <span>Heritage</span></h2>
+          <p>Sculptural artworks celebrating Filipino history and artistic heritage</p>
+        </div>
+        
+        <div className="gallery-grid">
+          {landmarks.map((item, index) => (
+            <div key={index} className={`gallery-item ${index === 0 ? 'gallery-large' : ''}`}>
+              <img src={item.image} alt={item.title} />
+              <div className="gallery-overlay">
+                <h4>{item.title}</h4>
+                <p>{item.desc}</p>
               </div>
             </div>
+          ))}
+        </div>
+        
+        <div className="gallery-cta">
+          <p>Experience the rich cultural heritage of Himlayang Pilipino</p>
+          <Link to="/register" className="btn-gallery-cta">Plan Your Visit</Link>
+        </div>
+      </section>
+
+      {/* Parallax CTA Section */}
+      <section className="parallax-cta" style={{backgroundImage: 'url(/Malakas-at-Maganda.jpg)'}}>
+        <div className="parallax-overlay"></div>
+        <div className="parallax-content">
+          <h2>A Meaningful Final Resting Place</h2>
+          <p>Serving Filipino families with compassion and dignity since 1971</p>
+          <div className="parallax-buttons">
+            <Link to="/register" className="btn-parallax-primary">Inquire Now</Link>
+            <a href="#contact" className="btn-parallax-secondary">Contact Us</a>
           </div>
         </div>
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="landing-section landing-contact">
-        <div className="section-container">
-          <div className="contact-content">
-            <div className="contact-info">
-              <span className="section-badge">Contact Us</span>
-              <h2>Visit Us</h2>
-              <p>
-                The memorial park maintains active communication channels for inquiries 
-                about services, plot availability, and visiting hours. Feel free to reach 
-                out to our dedicated staff for assistance.
-              </p>
-              
-              <div className="contact-details">
-                <div className="contact-item">
-                  <span className="contact-icon">📍</span>
-                  <div>
-                    <strong>Address</strong>
-                    <p>Himlayan Road, Barangay Pasong Tamo,<br />Tandang Sora, Quezon City, Philippines 1107</p>
-                  </div>
-                </div>
-                <div className="contact-item">
-                  <span className="contact-icon">📞</span>
-                  <div>
-                    <strong>Phone Numbers</strong>
-                    <p>0917-130-6930 • 0968-896-4850 • 0917-713-5034</p>
-                  </div>
-                </div>
-                <div className="contact-item">
-                  <span className="contact-icon">🌐</span>
-                  <div>
-                    <strong>Social Media</strong>
-                    <p>Follow us on Facebook and YouTube for updates</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="contact-notice">
-                <span className="notice-icon">ℹ️</span>
-                <p>
-                  For inquiries related to plot reservations, interment schedules, or 
-                  memorial services, please contact our office during business hours.
-                </p>
-              </div>
-            </div>
+      <section id="contact" className="contact-section">
+        <div className="contact-container">
+          <div className="contact-info-side">
+            <span className="section-label">Get in Touch</span>
+            <h2 className="section-title">Contact <span>Us</span></h2>
+            <p className="contact-intro">
+              We're here to assist you. Reach out for inquiries about services, 
+              plot availability, and visiting hours.
+            </p>
             
-            <form className="contact-form">
-              <div className="form-row">
-                <div className="form-group">
-                  <label>First Name</label>
-                  <input type="text" className="form-control" placeholder="Juan" />
-                </div>
-                <div className="form-group">
-                  <label>Last Name</label>
-                  <input type="text" className="form-control" placeholder="Dela Cruz" />
+            <div className="contact-cards">
+              <div className="contact-card">
+                <div className="contact-card-icon">📍</div>
+                <div>
+                  <h4>Location</h4>
+                  <p>Himlayan Road, Barangay Pasong Tamo,<br/>Tandang Sora, Quezon City 1107</p>
                 </div>
               </div>
-              <div className="form-group">
-                <label>Email</label>
-                <input type="email" className="form-control" placeholder="juan@example.com" />
+              <div className="contact-card">
+                <div className="contact-card-icon">📞</div>
+                <div>
+                  <h4>Phone</h4>
+                  <p>0917-130-6930<br/>0968-896-4850<br/>0917-713-5034</p>
+                </div>
               </div>
-              <div className="form-group">
-                <label>Message</label>
-                <textarea className="form-control" rows="4" placeholder="Your inquiry..."></textarea>
+              <div className="contact-card">
+                <div className="contact-card-icon">🕐</div>
+                <div>
+                  <h4>Hours</h4>
+                  <p>Monday - Sunday<br/>6:00 AM - 6:00 PM</p>
+                </div>
               </div>
-              <button type="submit" className="btn btn-primary btn-block">
-                Send Inquiry
-              </button>
-            </form>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="landing-cta">
-        <div className="cta-background">
-          <div className="cta-shape cta-shape-1"></div>
-          <div className="cta-shape cta-shape-2"></div>
-        </div>
-        <div className="section-container">
-          <div className="cta-content">
-            <h2>A Meaningful Final Resting Place for Your Loved Ones</h2>
-            <p>Serving Filipino families with compassion and dignity since 1971</p>
-            <div className="cta-buttons">
-              <Link to="/register" className="btn btn-cta-primary">
-                Inquire Now
-              </Link>
-              <Link to="/login" className="btn btn-cta-secondary">
-                Access Portal
-              </Link>
             </div>
+          </div>
+          
+          <div className="contact-form-side">
+            <form className="contact-form-new">
+              <h3>Send us a Message</h3>
+              <div className="form-row">
+                <input type="text" placeholder="First Name" className="form-input" />
+                <input type="text" placeholder="Last Name" className="form-input" />
+              </div>
+              <input type="email" placeholder="Email Address" className="form-input" />
+              <input type="tel" placeholder="Phone Number" className="form-input" />
+              <textarea placeholder="Your Message" rows="4" className="form-input"></textarea>
+              <button type="submit" className="btn-contact-submit">Send Message</button>
+            </form>
           </div>
         </div>
       </section>
@@ -397,7 +340,7 @@ const LandingPage = () => {
           <div className="footer-grid">
             <div className="footer-brand">
               <Link to="/" className="landing-logo">
-                <span className="logo-icon">🏔️</span>
+                <img src="/himlayan.png" alt="Himlayan" className="logo-img" />
                 <span className="logo-text">Himlayan</span>
               </Link>
               <p>Himlayang Pilipino Memorial Park — A premier memorial park reflecting Filipino culture and values.</p>
@@ -413,7 +356,7 @@ const LandingPage = () => {
                 <li><a href="#home">Home</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#services">Services</a></li>
-                <li><a href="#arts">Arts & Landmarks</a></li>
+                <li><a href="#gallery">Gallery</a></li>
                 <li><a href="#contact">Contact</a></li>
               </ul>
             </div>
@@ -431,9 +374,9 @@ const LandingPage = () => {
             <div className="footer-links">
               <h4>Contact</h4>
               <ul>
-                <li><a href="#contact">0917-130-6930</a></li>
-                <li><a href="#contact">0968-896-4850</a></li>
-                <li><a href="#contact">0917-713-5034</a></li>
+                <li><a href="tel:09171306930">0917-130-6930</a></li>
+                <li><a href="tel:09688964850">0968-896-4850</a></li>
+                <li><a href="tel:09177135034">0917-713-5034</a></li>
               </ul>
             </div>
           </div>

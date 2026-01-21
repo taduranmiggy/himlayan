@@ -1,17 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Navigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [currentImage, setCurrentImage] = useState(0);
   
   const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const successMessage = location.state?.message;
+
+  // Image slideshow
+  const images = [
+    '/himlayangpilipino.webp',
+    '/heritage_HD.png',
+    '/Florante-at-Laura-1-scaled.jpg',
+    '/Florante-at-Laura-2-scaled.jpg',
+    '/Gabriela-Silang-scaled.jpg',
+    '/Malakas-at-Maganda.jpg',
+    '/Panooran-2.jpg',
+    '/Pugad-Lawin-scaled.jpg',
+    '/Teresa-Magbanua-scaled.jpg'
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % images.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [images.length]);
 
   // Redirect if already authenticated
   if (isAuthenticated) {
@@ -35,165 +57,97 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="auth-split-container">
-      {/* Left Side - Form */}
-      <div className="auth-split-left">
-        <div className="auth-split-form">
-          <Link to="/" className="auth-back-link">
-            ← Back to Home
-          </Link>
-          
-          <div className="auth-form-header">
-            <h1>Sign In</h1>
-            <p>Welcome back! Please enter your details.</p>
-          </div>
-          
-          {successMessage && <div className="auth-success">{successMessage}</div>}
-          {error && <div className="auth-error">{error}</div>}
-          
-          <form onSubmit={handleSubmit} className="auth-form">
-            <div className="form-group">
-              <label>Email Address</label>
-              <div className="input-with-icon">
-                <span className="input-icon-left">👤</span>
-                <input
-                  type="email"
-                  className="form-control"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
-                  required
-                />
-              </div>
+    <div className="cyl-auth-page">
+      {/* Background decorations */}
+      <div className="cyl-bg-decoration cyl-bg-top-right"></div>
+      <div className="cyl-bg-decoration cyl-bg-bottom-left"></div>
+      
+      <div className="cyl-auth-card">
+        {/* Left Side - Image Slideshow */}
+        <div className="cyl-auth-image">
+          {images.map((img, index) => (
+            <img 
+              key={index}
+              src={img} 
+              alt={`Himlayang Pilipino ${index + 1}`}
+              className={`cyl-slide-image ${index === currentImage ? 'active' : ''}`}
+            />
+          ))}
+          <div className="cyl-image-overlay">
+            <div className="cyl-brand">
+              <img src="/himlayan.png" alt="Himlayan" className="cyl-logo-img" />
+              <span className="cyl-logo-text">Himlayang Pilipino</span>
             </div>
-            
-            <div className="form-group">
-              <label>Password</label>
-              <div className="input-with-icon">
-                <span className="input-icon-left">🔒</span>
-                <input
-                  type="password"
-                  className="form-control"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="auth-options">
-              <label className="checkbox-label">
-                <input type="checkbox" />
-                <span className="checkmark"></span>
-                Remember me
-              </label>
-              <a href="#" className="forgot-link">Forgot password?</a>
-            </div>
-            
-            <button 
-              type="submit" 
-              className="btn btn-primary btn-block btn-lg"
-              disabled={loading}
-            >
-              {loading ? (
-                <>
-                  <span className="btn-spinner"></span>
-                  Signing in...
-                </>
-              ) : (
-                'Sign In'
-              )}
-            </button>
-
-            <div className="auth-divider">
-              <span>or continue with</span>
-            </div>
-
-            <div className="social-buttons">
-              <button type="button" className="btn-social">
-                <span>G</span>
-              </button>
-              <button type="button" className="btn-social">
-                <span>f</span>
-              </button>
-              <button type="button" className="btn-social">
-                <span>🍎</span>
-              </button>
-            </div>
-          </form>
-
-          <div className="auth-footer-text">
-            <p>Don't have an account? <Link to="/register">Sign up for free</Link></p>
-          </div>
-
-          <div className="demo-box">
-            <p className="demo-title">🔑 Demo Credentials</p>
-            <div className="demo-creds">
-              <div className="demo-cred">
-                <span className="demo-badge admin">Admin</span>
-                <code>admin@cemetery.com</code>
-              </div>
-              <div className="demo-cred">
-                <span className="demo-badge staff">Staff</span>
-                <code>staff@cemetery.com</code>
-              </div>
-            </div>
-            <p className="demo-pass">Password: <code>password123</code></p>
+            <p className="cyl-tagline">HONORING MEMORIES. PRESERVING LEGACIES.</p>
           </div>
         </div>
-      </div>
 
-      {/* Right Side - Visual */}
-      <div className="auth-split-right">
-        <div className="auth-visual-content">
-          <div className="visual-shapes">
-            <div className="v-shape v-shape-1"></div>
-            <div className="v-shape v-shape-2"></div>
-            <div className="v-shape v-shape-3"></div>
-          </div>
-          
-          <div className="visual-card visual-card-main">
-            <div className="visual-card-header">
-              <span className="v-dot"></span>
-              <span className="v-dot"></span>
-              <span className="v-dot"></span>
-            </div>
-            <div className="visual-chart">
-              <div className="chart-bar" style={{height: '60%'}}></div>
-              <div className="chart-bar" style={{height: '80%'}}></div>
-              <div className="chart-bar" style={{height: '45%'}}></div>
-              <div className="chart-bar" style={{height: '90%'}}></div>
-              <div className="chart-bar" style={{height: '70%'}}></div>
-            </div>
-            <div className="visual-stats-row">
-              <div className="v-stat">
-                <span className="v-stat-value">176.18</span>
-                <span className="v-stat-label">Active Plots</span>
+        {/* Right Side - Form */}
+        <div className="cyl-auth-form-side">
+          <div className="cyl-form-content">
+            <h1 className="cyl-form-title">Log in your Account</h1>
+            <p className="cyl-form-subtitle">
+              Don't have an account? <Link to="/register">Sign up</Link>
+            </p>
+
+            {successMessage && <div className="cyl-alert cyl-alert-success">{successMessage}</div>}
+            {error && <div className="cyl-alert cyl-alert-error">{error}</div>}
+
+            <form onSubmit={handleSubmit} className="cyl-form">
+              <div className="cyl-form-group">
+                <input
+                  type="email"
+                  className="cyl-input"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Email address"
+                  required
+                />
               </div>
-            </div>
-          </div>
 
-          <div className="visual-card visual-card-float float-1">
-            <span className="float-emoji">📊</span>
-            <span className="float-label">Analytics</span>
-          </div>
+              <div className="cyl-form-group">
+                <div className="cyl-input-wrapper">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    className="cyl-input"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Password"
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="cyl-password-toggle"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? '👁️' : '👁️‍🗨️'}
+                  </button>
+                </div>
+              </div>
 
-          <div className="visual-card visual-card-float float-2">
-            <span className="float-emoji">🗺️</span>
-            <span className="float-label">GIS Maps</span>
-          </div>
+              <button
+                type="submit"
+                className="cyl-btn-primary"
+                disabled={loading}
+              >
+                {loading ? 'Logging in...' : 'Log in'}
+              </button>
+            </form>
 
-          <div className="visual-card visual-card-float float-3">
-            <span className="float-emoji">📱</span>
-            <span className="float-label">QR Codes</span>
-          </div>
-
-          <div className="visual-tagline">
-            <div className="tagline-icon">🔍</div>
-            <div className="tagline-text">
-              <h3>Your data, your rules</h3>
-              <p>Full control over cemetery management with powerful analytics</p>
+            {/* Demo Credentials */}
+            <div className="cyl-demo-box">
+              <p className="cyl-demo-title">Demo Credentials</p>
+              <div className="cyl-demo-creds">
+                <div className="cyl-demo-item">
+                  <span className="cyl-demo-role">Admin</span>
+                  <span>admin@cemetery.com</span>
+                </div>
+                <div className="cyl-demo-item">
+                  <span className="cyl-demo-role">Staff</span>
+                  <span>staff@cemetery.com</span>
+                </div>
+              </div>
+              <p className="cyl-demo-pass">Password: password123</p>
             </div>
           </div>
         </div>

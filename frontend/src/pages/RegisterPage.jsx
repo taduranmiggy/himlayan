@@ -1,20 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Navigate, Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { authService } from '../services/authService';
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
+    birthday: '',
     password: '',
     password_confirmation: ''
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [currentImage, setCurrentImage] = useState(0);
   
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
+  // Image slideshow
+  const images = [
+    '/himlayangpilipino.webp',
+    '/heritage_HD.png',
+    '/Florante-at-Laura-1-scaled.jpg',
+    '/Florante-at-Laura-2-scaled.jpg',
+    '/Gabriela-Silang-scaled.jpg',
+    '/Malakas-at-Maganda.jpg',
+    '/Panooran-2.jpg',
+    '/Pugad-Lawin-scaled.jpg',
+    '/Teresa-Magbanua-scaled.jpg'
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % images.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [images.length]);
 
   // Redirect if already authenticated
   if (isAuthenticated) {
@@ -46,7 +71,14 @@ const RegisterPage = () => {
     setLoading(true);
 
     try {
-      const result = await authService.register(formData);
+      const submitData = {
+        name: `${formData.firstName} ${formData.lastName}`,
+        email: formData.email,
+        password: formData.password,
+        password_confirmation: formData.password_confirmation
+      };
+      
+      const result = await authService.register(submitData);
       
       if (result.success) {
         navigate('/login', { state: { message: 'Registration successful! Please login.' } });
@@ -60,208 +92,145 @@ const RegisterPage = () => {
     setLoading(false);
   };
 
-  // Password strength indicator
-  const getPasswordStrength = () => {
-    const { password } = formData;
-    if (!password) return { level: 0, text: '', color: '' };
-    if (password.length < 6) return { level: 1, text: 'Weak', color: '#e74c3c' };
-    if (password.length < 10) return { level: 2, text: 'Medium', color: '#f39c12' };
-    return { level: 3, text: 'Strong', color: '#27ae60' };
-  };
-
-  const passwordStrength = getPasswordStrength();
-
   return (
-    <div className="auth-split-container">
-      {/* Left Side - Form */}
-      <div className="auth-split-left">
-        <div className="auth-split-form">
-          <Link to="/" className="auth-back-link">
-            ← Back to Home
-          </Link>
-          
-          <div className="auth-form-header">
-            <h1>Sign Up</h1>
-            <p>Create your account and start managing cemeteries.</p>
-          </div>
-          
-          {error && <div className="auth-error">{error}</div>}
-          
-          <form onSubmit={handleSubmit} className="auth-form">
-            <div className="form-group">
-              <label>Full Name</label>
-              <div className="input-with-icon">
-                <span className="input-icon-left">👤</span>
-                <input
-                  type="text"
-                  name="name"
-                  className="form-control"
-                  value={formData.name}
-                  onChange={handleChange}
-                  placeholder="Daniel Ahmad"
-                  required
-                />
-              </div>
+    <div className="cyl-auth-page">
+      {/* Background decorations */}
+      <div className="cyl-bg-decoration cyl-bg-top-right"></div>
+      <div className="cyl-bg-decoration cyl-bg-bottom-left"></div>
+      
+      <div className="cyl-auth-card cyl-auth-card-wide">
+        {/* Left Side - Image Slideshow */}
+        <div className="cyl-auth-image">
+          {images.map((img, index) => (
+            <img 
+              key={index}
+              src={img} 
+              alt={`Himlayang Pilipino ${index + 1}`}
+              className={`cyl-slide-image ${index === currentImage ? 'active' : ''}`}
+            />
+          ))}
+          <div className="cyl-image-overlay">
+            <div className="cyl-brand">
+              <img src="/himlayan.png" alt="Himlayan" className="cyl-logo-img" />
+              <span className="cyl-logo-text">Himlayang Pilipino</span>
             </div>
-
-            <div className="form-group">
-              <label>Email Address</label>
-              <div className="input-with-icon">
-                <span className="input-icon-left">✉️</span>
-                <input
-                  type="email"
-                  name="email"
-                  className="form-control"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="19danielahmadi@gmail.com"
-                  required
-                />
-              </div>
-            </div>
-            
-            <div className="form-group">
-              <label>Password</label>
-              <div className="input-with-icon">
-                <span className="input-icon-left">🔒</span>
-                <input
-                  type="password"
-                  name="password"
-                  className="form-control"
-                  value={formData.password}
-                  onChange={handleChange}
-                  placeholder="••••••••"
-                  required
-                />
-              </div>
-              {formData.password && (
-                <div className="password-strength">
-                  <div className="strength-bars">
-                    <div className={`strength-bar ${passwordStrength.level >= 1 ? 'active' : ''}`} style={{backgroundColor: passwordStrength.level >= 1 ? passwordStrength.color : ''}}></div>
-                    <div className={`strength-bar ${passwordStrength.level >= 2 ? 'active' : ''}`} style={{backgroundColor: passwordStrength.level >= 2 ? passwordStrength.color : ''}}></div>
-                    <div className={`strength-bar ${passwordStrength.level >= 3 ? 'active' : ''}`} style={{backgroundColor: passwordStrength.level >= 3 ? passwordStrength.color : ''}}></div>
-                  </div>
-                  <span className="strength-text" style={{color: passwordStrength.color}}>{passwordStrength.text}</span>
-                </div>
-              )}
-            </div>
-
-            <div className="form-group">
-              <label>Confirm Password</label>
-              <div className="input-with-icon">
-                <span className="input-icon-left">🔒</span>
-                <input
-                  type="password"
-                  name="password_confirmation"
-                  className="form-control"
-                  value={formData.password_confirmation}
-                  onChange={handleChange}
-                  placeholder="••••••••"
-                  required
-                />
-                {formData.password_confirmation && formData.password === formData.password_confirmation && (
-                  <span className="input-icon-right valid">✓</span>
-                )}
-              </div>
-            </div>
-
-            <div className="auth-terms">
-              <label className="checkbox-label">
-                <input type="checkbox" required />
-                <span className="checkmark"></span>
-                I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
-              </label>
-            </div>
-            
-            <button 
-              type="submit" 
-              className="btn btn-primary btn-block btn-lg"
-              disabled={loading}
-            >
-              {loading ? (
-                <>
-                  <span className="btn-spinner"></span>
-                  Creating Account...
-                </>
-              ) : (
-                'Sign Up'
-              )}
-            </button>
-
-            <div className="auth-divider">
-              <span>or sign up with</span>
-            </div>
-
-            <div className="social-buttons">
-              <button type="button" className="btn-social">
-                <span>G</span>
-              </button>
-              <button type="button" className="btn-social">
-                <span>f</span>
-              </button>
-              <button type="button" className="btn-social">
-                <span>🍎</span>
-              </button>
-            </div>
-          </form>
-
-          <div className="auth-footer-text">
-            <p>Already have an account? <Link to="/login">Sign in</Link></p>
+            <p className="cyl-tagline">HONORING MEMORIES. PRESERVING LEGACIES.</p>
           </div>
         </div>
-      </div>
 
-      {/* Right Side - Visual */}
-      <div className="auth-split-right signup-visual">
-        <div className="auth-visual-content">
-          <div className="visual-shapes">
-            <div className="v-shape v-shape-1"></div>
-            <div className="v-shape v-shape-2"></div>
-            <div className="v-shape v-shape-3"></div>
-          </div>
-          
-          <div className="visual-card visual-card-main">
-            <div className="visual-card-header">
-              <span className="v-dot"></span>
-              <span className="v-dot"></span>
-              <span className="v-dot"></span>
-            </div>
-            <div className="visual-chart">
-              <div className="chart-bar" style={{height: '70%'}}></div>
-              <div className="chart-bar" style={{height: '50%'}}></div>
-              <div className="chart-bar" style={{height: '85%'}}></div>
-              <div className="chart-bar" style={{height: '60%'}}></div>
-              <div className="chart-bar" style={{height: '95%'}}></div>
-            </div>
-            <div className="visual-stats-row">
-              <div className="v-stat">
-                <span className="v-stat-value">2,456</span>
-                <span className="v-stat-label">Records</span>
+        {/* Right Side - Form */}
+        <div className="cyl-auth-form-side">
+          <div className="cyl-form-content">
+            <h1 className="cyl-form-title">Create an Account</h1>
+            <p className="cyl-form-subtitle">
+              Already have an account? <Link to="/login">Login</Link>
+            </p>
+
+            {error && <div className="cyl-alert cyl-alert-error">{error}</div>}
+
+            <form onSubmit={handleSubmit} className="cyl-form">
+              <div className="cyl-form-row">
+                <div className="cyl-form-group">
+                  <input
+                    type="text"
+                    name="firstName"
+                    className="cyl-input"
+                    value={formData.firstName}
+                    onChange={handleChange}
+                    placeholder="First Name"
+                    required
+                  />
+                </div>
+                <div className="cyl-form-group">
+                  <input
+                    type="text"
+                    name="lastName"
+                    className="cyl-input"
+                    value={formData.lastName}
+                    onChange={handleChange}
+                    placeholder="Last Name"
+                    required
+                  />
+                </div>
               </div>
-            </div>
-          </div>
 
-          <div className="visual-card visual-card-float float-1">
-            <span className="float-emoji">🏔️</span>
-            <span className="float-label">Himlayan</span>
-          </div>
+              <div className="cyl-form-row">
+                <div className="cyl-form-group">
+                  <input
+                    type="email"
+                    name="email"
+                    className="cyl-input"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="Email Address"
+                    required
+                  />
+                </div>
+                <div className="cyl-form-group">
+                  <label className="cyl-input-label">Birthday</label>
+                  <input
+                    type="date"
+                    name="birthday"
+                    className="cyl-input"
+                    value={formData.birthday}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
 
-          <div className="visual-card visual-card-float float-2">
-            <span className="float-emoji">✨</span>
-            <span className="float-label">Modern UI</span>
-          </div>
+              <div className="cyl-form-row">
+                <div className="cyl-form-group">
+                  <div className="cyl-input-wrapper">
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      name="password"
+                      className="cyl-input"
+                      value={formData.password}
+                      onChange={handleChange}
+                      placeholder="Password"
+                      required
+                    />
+                    <button
+                      type="button"
+                      className="cyl-password-toggle"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? '👁️' : '👁️‍🗨️'}
+                    </button>
+                  </div>
+                </div>
+                <div className="cyl-form-group">
+                  <div className="cyl-input-wrapper">
+                    <input
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      name="password_confirmation"
+                      className="cyl-input"
+                      value={formData.password_confirmation}
+                      onChange={handleChange}
+                      placeholder="Confirm Password"
+                      required
+                    />
+                    <button
+                      type="button"
+                      className="cyl-password-toggle"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    >
+                      {showConfirmPassword ? '👁️' : '👁️‍🗨️'}
+                    </button>
+                  </div>
+                </div>
+              </div>
 
-          <div className="visual-card visual-card-float float-3">
-            <span className="float-emoji">🔐</span>
-            <span className="float-label">Secure</span>
-          </div>
+              <div className="cyl-divider"></div>
 
-          <div className="visual-tagline">
-            <div className="tagline-icon">🚀</div>
-            <div className="tagline-text">
-              <h3>Join thousands of users</h3>
-              <p>Start managing cemetery plots with ease today</p>
-            </div>
+              <button
+                type="submit"
+                className="cyl-btn-primary"
+                disabled={loading}
+              >
+                {loading ? 'Creating Account...' : 'Register Account'}
+              </button>
+            </form>
           </div>
         </div>
       </div>

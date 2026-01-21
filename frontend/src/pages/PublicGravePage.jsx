@@ -158,7 +158,7 @@ const PublicGravePage = () => {
           color: '#999',
           fontSize: '0.85rem'
         }}>
-          <p>🏔️ Himlayan</p>
+          <p><img src="/himlayan.png" alt="Himlayan" style={{width: '24px', height: '24px', verticalAlign: 'middle', marginRight: '6px'}} />Himlayan</p>
           <p>Digital Memorial Profile</p>
         </div>
       </div>

@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import '../styles/MemberDashboard.css';
+import MemberHeader from '../components/common/MemberHeader';
+import MemberFooter from '../components/common/MemberFooter';
+import '../styles/MemberServices.css';
 
 const MemberServicesPage = () => {
   const { user, logout } = useAuth();
+  const [activeTab, setActiveTab] = useState('all');
+  const [expandedFaq, setExpandedFaq] = useState(null);
 
   const handleLogout = async () => {
     await logout();
@@ -12,201 +16,352 @@ const MemberServicesPage = () => {
 
   const services = [
     {
-      icon: '🌿',
+      id: 1,
+      category: 'burial',
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <path d="M12 3v18M5 8l7-5 7 5M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/>
+        </svg>
+      ),
       title: 'Lawn Lots',
-      description: 'Tradisyunal na burial lots sa maayos na lawn area. May iba\'t ibang laki depende sa pangangailangan.',
-      features: ['Single o Family lots', 'Perpetual care included', 'Maayos na landscaping']
+      subtitle: 'Traditional Ground Burial',
+      description: 'Traditional burial lots in well-maintained lawn areas. Various sizes available depending on your family\'s needs.',
+      features: ['Single or Family lots', 'Perpetual care included', 'Well-maintained landscaping', 'Concrete vault ready'],
+      price: 'Starting at ₱150,000',
+      popular: false,
+      image: '/Florante-at-Laura-1-scaled.jpg'
     },
     {
-      icon: '🏛️',
+      id: 2,
+      category: 'cremation',
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <rect x="7" y="7" width="4" height="4"/>
+          <rect x="13" y="7" width="4" height="4"/>
+          <rect x="7" y="13" width="4" height="4"/>
+          <rect x="13" y="13" width="4" height="4"/>
+        </svg>
+      ),
       title: 'Columbarium Niches',
-      description: 'Modernong mga nicho para sa cremated remains. Available sa iba\'t ibang floor at section.',
-      features: ['Climate-controlled', 'Secured 24/7', 'Multiple sizes available']
+      subtitle: 'Modern Cremation Storage',
+      description: 'Modern niches for cremated remains. Climate-controlled and secured 24/7 for your peace of mind.',
+      features: ['Climate-controlled', 'Secured 24/7', 'Multiple sizes', 'Indoor location'],
+      price: 'Starting at ₱80,000',
+      popular: true,
+      image: '/Panooran-2.jpg'
     },
     {
-      icon: '🏰',
+      id: 3,
+      category: 'burial',
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/>
+          <rect x="9" y="9" width="2" height="2"/><rect x="13" y="9" width="2" height="2"/>
+        </svg>
+      ),
       title: 'Mausoleum',
-      description: 'Pribadong family tombs na may sariling structure. Perpekto para sa malalaking pamilya.',
-      features: ['Custom designs', 'Multiple vault capacity', 'Exclusive area']
+      subtitle: 'Private Family Tombs',
+      description: 'Private family tombs with their own structure. Perfect for large families who want an exclusive memorial.',
+      features: ['Custom designs', 'Multiple vault capacity', 'Exclusive area', 'Premium location'],
+      price: 'Starting at ₱500,000',
+      popular: false,
+      image: '/heritage_HD.png'
     },
     {
-      icon: '🌅',
+      id: 4,
+      category: 'burial',
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 6v6l4 2"/>
+        </svg>
+      ),
       title: 'Memorial Terrace',
-      description: 'Elevated memorial area na may magandang view. Perpekto para sa mga nais ng peaceful na lugar.',
-      features: ['Scenic views', 'Peaceful atmosphere', 'Well-maintained']
+      subtitle: 'Elevated Scenic Views',
+      description: 'Elevated memorial area with beautiful views of the entire park. Perfect for those who want a peaceful and serene location.',
+      features: ['Scenic views', 'Peaceful atmosphere', 'Well-maintained', 'Garden setting'],
+      price: 'Starting at ₱200,000',
+      popular: false,
+      image: '/Malakas-at-Maganda.jpg'
     },
     {
-      icon: '⛪',
+      id: 5,
+      category: 'services',
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <path d="M18 2H6a2 2 0 00-2 2v16l8-4 8 4V4a2 2 0 00-2-2z"/>
+        </svg>
+      ),
       title: 'Chapel Services',
-      description: 'Ang chapel ay available para sa memorial masses at services.',
-      features: ['Air-conditioned', 'Seating capacity: 100+', 'Audio-visual equipment']
+      subtitle: 'Memorial Masses & Events',
+      description: 'Our chapel is available for memorial masses, prayer services, and other religious ceremonies.',
+      features: ['Air-conditioned', '100+ seating capacity', 'Audio-visual system', 'Parking available'],
+      price: 'Starting at ₱5,000/event',
+      popular: false,
+      image: '/Teresa-Magbanua-scaled.jpg'
     },
     {
-      icon: '🚐',
-      title: 'Burial Services',
-      description: 'Kumpleto at maayos na burial assistance mula umpisa hanggang katapusan.',
-      features: ['Coordination with funeral homes', 'Equipment rental', 'Staff assistance']
+      id: 6,
+      category: 'services',
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <rect x="1" y="3" width="15" height="13" rx="2"/>
+          <path d="M16 8h4l3 3v5a2 2 0 01-2 2h-1M16 16H8M5.5 19.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM18.5 19.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"/>
+        </svg>
+      ),
+      title: 'Burial Coordination',
+      subtitle: 'Complete Assistance',
+      description: 'Complete and organized burial assistance from start to finish. One call and we\'ll take care of everything.',
+      features: ['Funeral home coordination', 'Equipment rental', 'Staff assistance', 'Documentation help'],
+      price: 'Starting at ₱15,000',
+      popular: true,
+      image: '/Gabriela-Silang-scaled.jpg'
     }
   ];
 
+  const faqs = [
+    {
+      id: 1,
+      question: 'How do I reserve a lot?',
+      answer: 'Visit our office or call (02) 8921-6947. You\'ll need a valid ID and initial payment (usually 20% down payment). You can also inquire online and we\'ll call you back.'
+    },
+    {
+      id: 2,
+      question: 'Do you have installment payment plans?',
+      answer: 'Yes, we have flexible payment plans up to 5 years to pay. You can pay monthly, quarterly, or yearly. Zero interest on 1-year payment plans.'
+    },
+    {
+      id: 3,
+      question: 'What is included in perpetual care?',
+      answer: 'It includes regular maintenance of lawn and landscaping, 24/7 security, upkeep of roads and pathways, and general beautification of the memorial park. This is lifetime with no additional fees.'
+    },
+    {
+      id: 4,
+      question: 'Can I visit anytime?',
+      answer: 'The park is open daily from 6:00 AM to 6:00 PM. During All Saints Day (Oct 31 - Nov 2), we are open 24 hours. Security and staff are always on duty.'
+    },
+    {
+      id: 5,
+      question: 'Is the lot transferable?',
+      answer: 'Yes, lot ownership can be transferred to immediate family members. There is only a minimal processing fee. Coordinate with our office for requirements.'
+    },
+    {
+      id: 6,
+      question: 'Are there discounts for senior citizens?',
+      answer: 'Yes, there is a 5% discount for senior citizens and PWDs. There are also special rates for group purchases and referral discounts.'
+    }
+  ];
+
+  const filteredServices = activeTab === 'all' 
+    ? services 
+    : services.filter(s => s.category === activeTab);
+
   return (
-    <div className="member-dashboard">
+    <div className="services-page">
       {/* Header */}
-      <header className="member-header">
-        <div className="header-content">
-          <div className="logo">
-            <span className="logo-icon">🕊️</span>
-            <Link to="/member/dashboard" style={{ textDecoration: 'none', color: 'white' }}>
-              <h1>Himlayan</h1>
-            </Link>
-          </div>
-          <nav className="member-nav">
-            <Link to="/member/dashboard" className="nav-link">Dashboard</Link>
-            <Link to="/member/search" className="nav-link">Maghanap ng Puntod</Link>
-            <Link to="/member/map" className="nav-link">Mapa</Link>
-            <Link to="/member/services" className="nav-link" style={{ color: '#ffd700' }}>Mga Serbisyo</Link>
-          </nav>
-          <div className="user-menu">
-            <span className="user-name">👤 {user?.name}</span>
-            <button onClick={handleLogout} className="logout-btn">Logout</button>
-          </div>
+      <MemberHeader />
+
+      {/* Hero Section */}
+      <section className="services-hero">
+        <div className="hero-overlay"></div>
+        <div className="hero-content">
+          <span className="hero-badge">Himlayang Pilipino Memorial Park</span>
+          <h1>Our Services</h1>
+          <p>We provide quality memorial services for your loved ones. Choose the right service for your family.</p>
         </div>
-      </header>
+      </section>
 
       {/* Main Content */}
-      <main className="member-main">
-        <section className="welcome-section">
-          <h2>📋 Mga Serbisyo</h2>
-          <p>Alamin ang iba't ibang serbisyo na inaalok ng Himlayang Pilipino Memorial Park</p>
-        </section>
-
-        {/* Services Grid */}
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', 
-          gap: '25px',
-          marginBottom: '30px'
-        }}>
-          {services.map((service, index) => (
-            <div key={index} style={{
-              background: 'white',
-              borderRadius: '15px',
-              padding: '25px',
-              boxShadow: '0 5px 20px rgba(0,0,0,0.08)',
-              transition: 'transform 0.3s'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '15px' }}>
-                <span style={{ fontSize: '2.5rem' }}>{service.icon}</span>
-                <h3 style={{ color: '#1a472a', margin: 0 }}>{service.title}</h3>
-              </div>
-              <p style={{ color: '#666', marginBottom: '15px', lineHeight: '1.6' }}>
-                {service.description}
-              </p>
-              <ul style={{ 
-                listStyle: 'none', 
-                padding: 0, 
-                margin: 0,
-                borderTop: '1px solid #eee',
-                paddingTop: '15px'
-              }}>
-                {service.features.map((feature, idx) => (
-                  <li key={idx} style={{ 
-                    color: '#555', 
-                    padding: '5px 0',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '10px'
-                  }}>
-                    <span style={{ color: '#1a472a' }}>✓</span>
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+      <main className="services-main">
+        {/* Filter Tabs */}
+        <div className="filter-section">
+          <div className="filter-tabs">
+            <button 
+              className={`filter-tab ${activeTab === 'all' ? 'active' : ''}`}
+              onClick={() => setActiveTab('all')}
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+                <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+              </svg>
+              All Services
+            </button>
+            <button 
+              className={`filter-tab ${activeTab === 'burial' ? 'active' : ''}`}
+              onClick={() => setActiveTab('burial')}
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M12 3v18M5 8l7-5 7 5"/>
+              </svg>
+              Burial Options
+            </button>
+            <button 
+              className={`filter-tab ${activeTab === 'cremation' ? 'active' : ''}`}
+              onClick={() => setActiveTab('cremation')}
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <rect x="8" y="8" width="8" height="8"/>
+              </svg>
+              Cremation
+            </button>
+            <button 
+              className={`filter-tab ${activeTab === 'services' ? 'active' : ''}`}
+              onClick={() => setActiveTab('services')}
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
+              </svg>
+              Additional Services
+            </button>
+          </div>
         </div>
 
-        {/* Pricing Note */}
-        <section style={{
-          background: 'linear-gradient(135deg, #1a472a 0%, #2d5a3d 100%)',
-          borderRadius: '15px',
-          padding: '30px',
-          color: 'white',
-          textAlign: 'center',
-          marginBottom: '30px'
-        }}>
-          <h3 style={{ marginBottom: '15px' }}>💰 Mag-inquire ng Presyo</h3>
-          <p style={{ opacity: 0.9, marginBottom: '20px' }}>
-            Para sa presyo at available na lots, makipag-ugnayan sa aming sales office.
-            May flexible payment plans kami para sa inyong kaginhawaan.
-          </p>
-          <div style={{ display: 'flex', gap: '15px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <a href="tel:+6328921-6947" style={{
-              background: 'white',
-              color: '#1a472a',
-              padding: '12px 30px',
-              borderRadius: '8px',
-              textDecoration: 'none',
-              fontWeight: '500'
-            }}>
-              📞 Tumawag Ngayon
-            </a>
-            <Link to="/member/contact" style={{
-              background: 'rgba(255,255,255,0.2)',
-              color: 'white',
-              padding: '12px 30px',
-              borderRadius: '8px',
-              textDecoration: 'none',
-              border: '1px solid rgba(255,255,255,0.5)'
-            }}>
-              ✉️ Mag-send ng Inquiry
-            </Link>
+        {/* Services Grid */}
+        <section className="services-grid">
+          {filteredServices.map((service) => (
+            <div key={service.id} className={`service-card ${service.popular ? 'popular' : ''}`}>
+              {service.popular && <div className="popular-badge">Most Popular</div>}
+              <div className="service-image" style={{ backgroundImage: `url(${service.image})` }}>
+                <div className="service-icon">{service.icon}</div>
+              </div>
+              <div className="service-content">
+                <div className="service-header">
+                  <h3>{service.title}</h3>
+                  <span className="service-subtitle">{service.subtitle}</span>
+                </div>
+                <p className="service-description">{service.description}</p>
+                <ul className="service-features">
+                  {service.features.map((feature, idx) => (
+                    <li key={idx}>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <polyline points="20 6 9 17 4 12"/>
+                      </svg>
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+                <div className="service-footer">
+                  <span className="service-price">{service.price}</span>
+                  <button className="inquire-btn">Inquire Now</button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </section>
+
+        {/* CTA Section */}
+        <section className="cta-section">
+          <div className="cta-content">
+            <div className="cta-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/>
+              </svg>
+            </div>
+            <div className="cta-text">
+              <h2>Need Help Choosing?</h2>
+              <p>Our friendly staff is ready to help you. Talk to our memorial consultants for personalized recommendations.</p>
+            </div>
+            <div className="cta-buttons">
+              <a href="tel:+6328921-6947" className="cta-btn primary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/>
+                </svg>
+                (02) 8921-6947
+              </a>
+              <Link to="/member/contact" className="cta-btn secondary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                  <polyline points="22,6 12,13 2,6"/>
+                </svg>
+                Send Inquiry
+              </Link>
+            </div>
           </div>
         </section>
 
         {/* FAQ Section */}
-        <section style={{
-          background: 'white',
-          borderRadius: '15px',
-          padding: '25px',
-          boxShadow: '0 5px 20px rgba(0,0,0,0.08)'
-        }}>
-          <h3 style={{ color: '#1a472a', marginBottom: '20px' }}>❓ Mga Karaniwang Tanong</h3>
+        <section className="faq-section">
+          <div className="faq-header">
+            <span className="faq-badge">FAQ</span>
+            <h2>Frequently Asked Questions</h2>
+            <p>Here are answers to common questions about our services</p>
+          </div>
           
-          {[
-            {
-              q: 'Paano mag-reserve ng lot?',
-              a: 'Pumunta sa aming office o tumawag sa (02) 8921-6947. Kailangan lang ng valid ID at initial payment.'
-            },
-            {
-              q: 'May installment ba?',
-              a: 'Oo, may flexible payment plans kami. Pwede monthly, quarterly, o yearly ang pagbayad.'
-            },
-            {
-              q: 'Ano ang kasama sa perpetual care?',
-              a: 'Kasama ang maintenance ng lawn, landscaping, at security ng buong memorial park.'
-            },
-            {
-              q: 'Pwede bang bisitahin kahit kailan?',
-              a: 'Ang park ay bukas araw-araw mula 6:00 AM hanggang 6:00 PM. Sa Undas, 24 hours kami bukas.'
-            }
-          ].map((faq, index) => (
-            <div key={index} style={{
-              borderBottom: index < 3 ? '1px solid #eee' : 'none',
-              paddingBottom: '15px',
-              marginBottom: '15px'
-            }}>
-              <h4 style={{ color: '#1a472a', marginBottom: '8px' }}>{faq.q}</h4>
-              <p style={{ color: '#666', margin: 0 }}>{faq.a}</p>
+          <div className="faq-grid">
+            {faqs.map((faq) => (
+              <div 
+                key={faq.id} 
+                className={`faq-item ${expandedFaq === faq.id ? 'expanded' : ''}`}
+                onClick={() => setExpandedFaq(expandedFaq === faq.id ? null : faq.id)}
+              >
+                <div className="faq-question">
+                  <h4>{faq.question}</h4>
+                  <div className="faq-toggle">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <line x1="12" y1="5" x2="12" y2="19"/>
+                      <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                  </div>
+                </div>
+                <div className="faq-answer">
+                  <p>{faq.answer}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Trust Badges */}
+        <section className="trust-section">
+          <div className="trust-grid">
+            <div className="trust-item">
+              <div className="trust-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+              </div>
+              <h4>50+ Years</h4>
+              <p>Trusted since 1971</p>
             </div>
-          ))}
+            <div className="trust-item">
+              <div className="trust-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                  <circle cx="9" cy="7" r="4"/>
+                  <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+                </svg>
+              </div>
+              <h4>10,000+ Families</h4>
+              <p>Served with care</p>
+            </div>
+            <div className="trust-item">
+              <div className="trust-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/>
+                  <path d="M3 9h18M9 21V9"/>
+                </svg>
+              </div>
+              <h4>37 Hectares</h4>
+              <p>Premium memorial park</p>
+            </div>
+            <div className="trust-item">
+              <div className="trust-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+              </div>
+              <h4>24/7 Security</h4>
+              <p>Always protected</p>
+            </div>
+          </div>
         </section>
       </main>
 
       {/* Footer */}
-      <footer className="member-footer">
-        <p>© 2025 Himlayang Pilipino Memorial Park. Lahat ng Karapatan ay Nakalaan.</p>
-      </footer>
+      <MemberFooter />
     </div>
   );
 };
